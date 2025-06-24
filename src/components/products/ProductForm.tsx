@@ -101,7 +101,7 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
     try {
       const { error } = await supabase
         .from('produtos')
-        .insert([data]);
+        .insert(data);
 
       if (error) throw error;
 

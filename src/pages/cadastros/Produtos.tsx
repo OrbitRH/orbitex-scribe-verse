@@ -2,9 +2,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Plus, Package, Shirt, Zap, Wrench, Package2 } from 'lucide-react';
+import { useState } from 'react';
+import ProductForm from '@/components/products/ProductForm';
 
 export default function Produtos() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const tiposProduto = [
     {
       tipo: 'Matéria-Prima',
@@ -43,6 +48,11 @@ export default function Produtos() {
     }
   ];
 
+  const handleProductSuccess = () => {
+    setDialogOpen(false);
+    // Aqui poderia recarregar lista de produtos se existisse
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -52,10 +62,17 @@ export default function Produtos() {
             Sistema completo de cadastro para indústria têxtil com controle de grades, fichas técnicas e rastreabilidade.
           </p>
         </div>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Novo Produto
-        </Button>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Produto
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <ProductForm onSuccess={handleProductSuccess} />
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Overview por tipo de produto */}
