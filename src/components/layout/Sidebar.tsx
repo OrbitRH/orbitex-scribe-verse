@@ -102,6 +102,9 @@ const menuItems = [
     icon: Settings,
     href: '/configuracoes',
     roles: ['admin'] as AppRole[],
+    submenu: [
+      { title: 'Empresa', href: '/configuracoes/empresa' },
+    ],
   },
 ];
 
