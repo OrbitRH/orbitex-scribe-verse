@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -42,6 +41,10 @@ const menuItems = [
     submenu: [
       { title: 'Produtos', href: '/cadastros/produtos' },
       { title: 'Empresas', href: '/cadastros/empresas' },
+      { title: 'Centros de Custo', href: '/cadastros/centros-custo' },
+      { title: 'Setores', href: '/cadastros/setores' },
+      { title: 'Funções', href: '/cadastros/funcoes' },
+      { title: 'Organograma', href: '/cadastros/organograma' },
     ],
   },
   {

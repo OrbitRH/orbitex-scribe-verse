@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Package, Building } from 'lucide-react';
+import { Package, Building, Target, Building2, UserCheck, Network } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -20,6 +20,34 @@ export default function Cadastros() {
       href: '/cadastros/empresas',
       color: 'text-green-600',
     },
+    {
+      title: 'Centros de Custo',
+      description: 'Controle e organização de custos',
+      icon: Target,
+      href: '/cadastros/centros-custo',
+      color: 'text-purple-600',
+    },
+    {
+      title: 'Setores',
+      description: 'Departamentos e divisões da empresa',
+      icon: Building2,
+      href: '/cadastros/setores',
+      color: 'text-orange-600',
+    },
+    {
+      title: 'Funções',
+      description: 'Cargos e funções organizacionais',
+      icon: UserCheck,
+      href: '/cadastros/funcoes',
+      color: 'text-indigo-600',
+    },
+    {
+      title: 'Organograma',
+      description: 'Estrutura hierárquica da organização',
+      icon: Network,
+      href: '/cadastros/organograma',
+      color: 'text-teal-600',
+    },
   ];
 
   return (
@@ -31,7 +59,7 @@ export default function Cadastros() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {modules.map((module) => {
           const Icon = module.icon;
           return (

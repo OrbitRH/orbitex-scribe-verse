@@ -15,6 +15,10 @@ import NotFound from "./pages/NotFound";
 import Cadastros from "./pages/Cadastros";
 import Produtos from "./pages/cadastros/Produtos";
 import Empresas from "./pages/cadastros/Empresas";
+import CentrosCusto from "./pages/cadastros/CentrosCusto";
+import Setores from "./pages/cadastros/Setores";
+import Funcoes from "./pages/cadastros/Funcoes";
+import Organograma from "./pages/cadastros/Organograma";
 import Estoque from "./pages/Estoque";
 import PCP from "./pages/PCP";
 import Tarefas from "./pages/Tarefas";
@@ -70,6 +74,34 @@ const App = () => (
               <AuthGuard requireRoles={['admin', 'gestor']}>
                 <Layout>
                   <Empresas />
+                </Layout>
+              </AuthGuard>
+            } />
+            <Route path="/cadastros/centros-custo" element={
+              <AuthGuard requireRoles={['admin', 'gestor']}>
+                <Layout>
+                  <CentrosCusto />
+                </Layout>
+              </AuthGuard>
+            } />
+            <Route path="/cadastros/setores" element={
+              <AuthGuard requireRoles={['admin', 'gestor']}>
+                <Layout>
+                  <Setores />
+                </Layout>
+              </AuthGuard>
+            } />
+            <Route path="/cadastros/funcoes" element={
+              <AuthGuard requireRoles={['admin', 'gestor']}>
+                <Layout>
+                  <Setores />
+                </Layout>
+              </AuthGuard>
+            } />
+            <Route path="/cadastros/organograma" element={
+              <AuthGuard requireRoles={['admin', 'gestor']}>
+                <Layout>
+                  <Organograma />
                 </Layout>
               </AuthGuard>
             } />
