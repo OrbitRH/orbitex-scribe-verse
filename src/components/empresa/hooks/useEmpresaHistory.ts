@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 export interface PurchaseHistory {
@@ -18,7 +17,7 @@ export interface SalesHistory {
   quantidade: number;
   valor_unitario: number;
   valor_total: number;
-  status: 'concluido' | 'pendente' | 'cancelado';
+  status: 'concluido' | 'pendente' | 'enviado' | 'cancelado';
 }
 
 export interface Order {
