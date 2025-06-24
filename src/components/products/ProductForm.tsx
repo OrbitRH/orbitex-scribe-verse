@@ -99,9 +99,38 @@ export default function ProductForm({ onSuccess }: ProductFormProps) {
   const onSubmit = async (data: ProductFormData) => {
     setLoading(true);
     try {
+      // Prepare data for Supabase insertion, ensuring all required fields are present
+      const insertData = {
+        nome_comercial: data.nome_comercial,
+        nome_tecnico: data.nome_tecnico || null,
+        codigo_interno: data.codigo_interno,
+        ncm: data.ncm || null,
+        cfop_padrao: data.cfop_padrao || null,
+        tipo_produto: data.tipo_produto,
+        categoria_id: data.categoria_id || null,
+        unidade_medida_id: data.unidade_medida_id,
+        peso_bruto: data.peso_bruto || null,
+        peso_liquido: data.peso_liquido || null,
+        comprimento: data.comprimento || null,
+        largura: data.largura || null,
+        altura: data.altura || null,
+        controle_estoque: data.controle_estoque,
+        controla_lote: data.controla_lote,
+        controla_grade: data.controla_grade,
+        validade_dias: data.validade_dias || null,
+        perda_tecnica_percent: data.perda_tecnica_percent || null,
+        tempo_producao_horas: data.tempo_producao_horas || null,
+        custo_transformacao: data.custo_transformacao || null,
+        preco_medio_compra: data.preco_medio_compra || null,
+        preco_sugerido_venda: data.preco_sugerido_venda || null,
+        markup_padrao: data.markup_padrao || null,
+        observacoes_tecnicas: data.observacoes_tecnicas || null,
+        descricao: data.descricao || null,
+      };
+
       const { error } = await supabase
         .from('produtos')
-        .insert(data);
+        .insert(insertData);
 
       if (error) throw error;
 
