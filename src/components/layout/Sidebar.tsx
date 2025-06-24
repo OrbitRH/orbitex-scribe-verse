@@ -8,6 +8,7 @@ import { AppRole } from '@/types/auth';
 import {
   Package,
   Users,
+  Building,
   Warehouse,
   ClipboardList,
   Clock,
@@ -39,9 +40,7 @@ const menuItems = [
     roles: ['admin', 'gestor'] as AppRole[],
     submenu: [
       { title: 'Produtos', href: '/cadastros/produtos' },
-      { title: 'Colaboradores', href: '/cadastros/colaboradores' },
-      { title: 'Fornecedores', href: '/cadastros/fornecedores' },
-      { title: 'Clientes', href: '/cadastros/clientes' },
+      { title: 'Empresas', href: '/cadastros/empresas' },
     ],
   },
   {
@@ -67,6 +66,12 @@ const menuItems = [
     icon: Users,
     href: '/rh',
     roles: ['admin', 'rh', 'gestor'] as AppRole[],
+    submenu: [
+      { title: 'Colaboradores', href: '/rh/colaboradores' },
+      { title: 'Ponto', href: '/rh/ponto' },
+      { title: 'Documentos', href: '/rh/documentos' },
+      { title: 'Avaliações', href: '/rh/avaliacoes' },
+    ],
   },
   {
     title: 'Financeiro',

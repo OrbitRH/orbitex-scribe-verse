@@ -9,6 +9,451 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      categorias_produtos: {
+        Row: {
+          ativo: boolean
+          categoria_pai_id: string | null
+          created_at: string
+          descricao: string | null
+          id: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          categoria_pai_id?: string | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          categoria_pai_id?: string | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "categorias_produtos_categoria_pai_id_fkey"
+            columns: ["categoria_pai_id"]
+            isOneToOne: false
+            referencedRelation: "categorias_produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      empresas: {
+        Row: {
+          ativo: boolean
+          cep: string | null
+          cidade: string | null
+          cnpj_cpf: string | null
+          contato_principal: string | null
+          created_at: string
+          email: string | null
+          endereco: string | null
+          estado: string | null
+          id: string
+          inscricao_estadual: string | null
+          inscricao_municipal: string | null
+          nome_fantasia: string | null
+          observacoes: string | null
+          razao_social: string
+          telefone: string | null
+          tipo_empresa: Database["public"]["Enums"]["tipo_empresa"]
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          cep?: string | null
+          cidade?: string | null
+          cnpj_cpf?: string | null
+          contato_principal?: string | null
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          inscricao_estadual?: string | null
+          inscricao_municipal?: string | null
+          nome_fantasia?: string | null
+          observacoes?: string | null
+          razao_social: string
+          telefone?: string | null
+          tipo_empresa?: Database["public"]["Enums"]["tipo_empresa"]
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          cep?: string | null
+          cidade?: string | null
+          cnpj_cpf?: string | null
+          contato_principal?: string | null
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          inscricao_estadual?: string | null
+          inscricao_municipal?: string | null
+          nome_fantasia?: string | null
+          observacoes?: string | null
+          razao_social?: string
+          telefone?: string | null
+          tipo_empresa?: Database["public"]["Enums"]["tipo_empresa"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ficha_tecnica_componentes: {
+        Row: {
+          created_at: string
+          ficha_tecnica_id: string
+          id: string
+          observacoes: string | null
+          perda_percent: number | null
+          produto_componente_id: string
+          quantidade: number
+          unidade_medida_id: string
+        }
+        Insert: {
+          created_at?: string
+          ficha_tecnica_id: string
+          id?: string
+          observacoes?: string | null
+          perda_percent?: number | null
+          produto_componente_id: string
+          quantidade: number
+          unidade_medida_id: string
+        }
+        Update: {
+          created_at?: string
+          ficha_tecnica_id?: string
+          id?: string
+          observacoes?: string | null
+          perda_percent?: number | null
+          produto_componente_id?: string
+          quantidade?: number
+          unidade_medida_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ficha_tecnica_componentes_ficha_tecnica_id_fkey"
+            columns: ["ficha_tecnica_id"]
+            isOneToOne: false
+            referencedRelation: "fichas_tecnicas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ficha_tecnica_componentes_produto_componente_id_fkey"
+            columns: ["produto_componente_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ficha_tecnica_componentes_unidade_medida_id_fkey"
+            columns: ["unidade_medida_id"]
+            isOneToOne: false
+            referencedRelation: "unidades_medida"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fichas_tecnicas: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          descricao: string | null
+          id: string
+          produto_id: string
+          updated_at: string
+          versao: number
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          produto_id: string
+          updated_at?: string
+          versao?: number
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          produto_id?: string
+          updated_at?: string
+          versao?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fichas_tecnicas_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      historico_precos: {
+        Row: {
+          created_at: string
+          data_vigencia: string
+          empresa_id: string | null
+          id: string
+          observacoes: string | null
+          preco: number
+          produto_id: string
+          tipo_preco: string
+        }
+        Insert: {
+          created_at?: string
+          data_vigencia: string
+          empresa_id?: string | null
+          id?: string
+          observacoes?: string | null
+          preco: number
+          produto_id: string
+          tipo_preco: string
+        }
+        Update: {
+          created_at?: string
+          data_vigencia?: string
+          empresa_id?: string | null
+          id?: string
+          observacoes?: string | null
+          preco?: number
+          produto_id?: string
+          tipo_preco?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "historico_precos_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "historico_precos_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      produtos: {
+        Row: {
+          altura: number | null
+          categoria_id: string | null
+          cfop_padrao: string | null
+          codigo_interno: string
+          comprimento: number | null
+          controla_grade: boolean
+          controla_lote: boolean
+          controle_estoque: Database["public"]["Enums"]["controle_estoque"]
+          created_at: string
+          custo_transformacao: number | null
+          descricao: string | null
+          id: string
+          largura: number | null
+          markup_padrao: number | null
+          ncm: string | null
+          nome_comercial: string
+          nome_tecnico: string | null
+          observacoes_tecnicas: string | null
+          perda_tecnica_percent: number | null
+          peso_bruto: number | null
+          peso_liquido: number | null
+          possui_ficha_tecnica: boolean
+          preco_medio_compra: number | null
+          preco_sugerido_venda: number | null
+          situacao: boolean
+          tempo_producao_horas: number | null
+          tipo_produto: Database["public"]["Enums"]["tipo_produto"]
+          unidade_medida_id: string
+          updated_at: string
+          validade_dias: number | null
+        }
+        Insert: {
+          altura?: number | null
+          categoria_id?: string | null
+          cfop_padrao?: string | null
+          codigo_interno: string
+          comprimento?: number | null
+          controla_grade?: boolean
+          controla_lote?: boolean
+          controle_estoque?: Database["public"]["Enums"]["controle_estoque"]
+          created_at?: string
+          custo_transformacao?: number | null
+          descricao?: string | null
+          id?: string
+          largura?: number | null
+          markup_padrao?: number | null
+          ncm?: string | null
+          nome_comercial: string
+          nome_tecnico?: string | null
+          observacoes_tecnicas?: string | null
+          perda_tecnica_percent?: number | null
+          peso_bruto?: number | null
+          peso_liquido?: number | null
+          possui_ficha_tecnica?: boolean
+          preco_medio_compra?: number | null
+          preco_sugerido_venda?: number | null
+          situacao?: boolean
+          tempo_producao_horas?: number | null
+          tipo_produto: Database["public"]["Enums"]["tipo_produto"]
+          unidade_medida_id: string
+          updated_at?: string
+          validade_dias?: number | null
+        }
+        Update: {
+          altura?: number | null
+          categoria_id?: string | null
+          cfop_padrao?: string | null
+          codigo_interno?: string
+          comprimento?: number | null
+          controla_grade?: boolean
+          controla_lote?: boolean
+          controle_estoque?: Database["public"]["Enums"]["controle_estoque"]
+          created_at?: string
+          custo_transformacao?: number | null
+          descricao?: string | null
+          id?: string
+          largura?: number | null
+          markup_padrao?: number | null
+          ncm?: string | null
+          nome_comercial?: string
+          nome_tecnico?: string | null
+          observacoes_tecnicas?: string | null
+          perda_tecnica_percent?: number | null
+          peso_bruto?: number | null
+          peso_liquido?: number | null
+          possui_ficha_tecnica?: boolean
+          preco_medio_compra?: number | null
+          preco_sugerido_venda?: number | null
+          situacao?: boolean
+          tempo_producao_horas?: number | null
+          tipo_produto?: Database["public"]["Enums"]["tipo_produto"]
+          unidade_medida_id?: string
+          updated_at?: string
+          validade_dias?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "produtos_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias_produtos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "produtos_unidade_medida_id_fkey"
+            columns: ["unidade_medida_id"]
+            isOneToOne: false
+            referencedRelation: "unidades_medida"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      produtos_fornecedores: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          empresa_id: string
+          id: string
+          observacoes: string | null
+          prazo_entrega_dias: number | null
+          preco_atual: number | null
+          produto_id: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          empresa_id: string
+          id?: string
+          observacoes?: string | null
+          prazo_entrega_dias?: number | null
+          preco_atual?: number | null
+          produto_id: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          empresa_id?: string
+          id?: string
+          observacoes?: string | null
+          prazo_entrega_dias?: number | null
+          preco_atual?: number | null
+          produto_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "produtos_fornecedores_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "produtos_fornecedores_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      produtos_grades: {
+        Row: {
+          ativo: boolean
+          codigo_grade: string | null
+          cor: string | null
+          created_at: string
+          id: string
+          produto_id: string
+          tamanho: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          codigo_grade?: string | null
+          cor?: string | null
+          created_at?: string
+          id?: string
+          produto_id: string
+          tamanho?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          codigo_grade?: string | null
+          cor?: string | null
+          created_at?: string
+          id?: string
+          produto_id?: string
+          tamanho?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "produtos_grades_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -35,6 +480,33 @@ export type Database = {
           full_name?: string
           id?: string
           phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      unidades_medida: {
+        Row: {
+          ativo: boolean
+          codigo: string
+          created_at: string
+          id: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          codigo: string
+          created_at?: string
+          id?: string
+          nome: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          codigo?: string
+          created_at?: string
+          id?: string
+          nome?: string
           updated_at?: string
         }
         Relationships: []
@@ -82,6 +554,14 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "gestor" | "colaborador" | "rh" | "financeiro"
+      controle_estoque: "padrao" | "grade" | "lote"
+      tipo_empresa: "cliente" | "fornecedor" | "ambos"
+      tipo_produto:
+        | "materia_prima"
+        | "produto_acabado"
+        | "em_processo"
+        | "aviamento"
+        | "servico"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -198,6 +678,15 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "gestor", "colaborador", "rh", "financeiro"],
+      controle_estoque: ["padrao", "grade", "lote"],
+      tipo_empresa: ["cliente", "fornecedor", "ambos"],
+      tipo_produto: [
+        "materia_prima",
+        "produto_acabado",
+        "em_processo",
+        "aviamento",
+        "servico",
+      ],
     },
   },
 } as const

@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Package, Users, Building, UserCheck } from 'lucide-react';
+import { Package, Building } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -8,31 +8,17 @@ export default function Cadastros() {
   const modules = [
     {
       title: 'Produtos',
-      description: 'Gerencie o catálogo de produtos',
+      description: 'Cadastro completo para indústria têxtil',
       icon: Package,
       href: '/cadastros/produtos',
       color: 'text-blue-600',
     },
     {
-      title: 'Colaboradores',
-      description: 'Cadastro de funcionários',
-      icon: Users,
-      href: '/cadastros/colaboradores',
-      color: 'text-green-600',
-    },
-    {
-      title: 'Fornecedores',
-      description: 'Gestão de fornecedores',
+      title: 'Empresas',
+      description: 'Clientes, fornecedores e parceiros',
       icon: Building,
-      href: '/cadastros/fornecedores',
-      color: 'text-purple-600',
-    },
-    {
-      title: 'Clientes',
-      description: 'Base de clientes',
-      icon: UserCheck,
-      href: '/cadastros/clientes',
-      color: 'text-orange-600',
+      href: '/cadastros/empresas',
+      color: 'text-green-600',
     },
   ];
 
@@ -45,7 +31,7 @@ export default function Cadastros() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {modules.map((module) => {
           const Icon = module.icon;
           return (

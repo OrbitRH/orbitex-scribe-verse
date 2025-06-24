@@ -14,13 +14,15 @@ import NotFound from "./pages/NotFound";
 // Import all pages
 import Cadastros from "./pages/Cadastros";
 import Produtos from "./pages/cadastros/Produtos";
-import Colaboradores from "./pages/cadastros/Colaboradores";
-import Fornecedores from "./pages/cadastros/Fornecedores";
-import Clientes from "./pages/cadastros/Clientes";
+import Empresas from "./pages/cadastros/Empresas";
 import Estoque from "./pages/Estoque";
 import PCP from "./pages/PCP";
 import Tarefas from "./pages/Tarefas";
 import RH from "./pages/RH";
+import Colaboradores from "./pages/rh/Colaboradores";
+import Ponto from "./pages/rh/Ponto";
+import Documentos from "./pages/rh/Documentos";
+import Avaliacoes from "./pages/rh/Avaliacoes";
 import Financeiro from "./pages/Financeiro";
 import Comercial from "./pages/Comercial";
 import Relatorios from "./pages/Relatorios";
@@ -63,24 +65,10 @@ const App = () => (
                 </Layout>
               </AuthGuard>
             } />
-            <Route path="/cadastros/colaboradores" element={
+            <Route path="/cadastros/empresas" element={
               <AuthGuard requireRoles={['admin', 'gestor']}>
                 <Layout>
-                  <Colaboradores />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/cadastros/fornecedores" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Colaboradores />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/cadastros/clientes" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Clientes />
+                  <Empresas />
                 </Layout>
               </AuthGuard>
             } />
@@ -117,6 +105,34 @@ const App = () => (
               <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
                 <Layout>
                   <RH />
+                </Layout>
+              </AuthGuard>
+            } />
+            <Route path="/rh/colaboradores" element={
+              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
+                <Layout>
+                  <Colaboradores />
+                </Layout>
+              </AuthGuard>
+            } />
+            <Route path="/rh/ponto" element={
+              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
+                <Layout>
+                  <Ponto />
+                </Layout>
+              </AuthGuard>
+            } />
+            <Route path="/rh/documentos" element={
+              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
+                <Layout>
+                  <Documentos />
+                </Layout>
+              </AuthGuard>
+            } />
+            <Route path="/rh/avaliacoes" element={
+              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
+                <Layout>
+                  <Avaliacoes />
                 </Layout>
               </AuthGuard>
             } />
