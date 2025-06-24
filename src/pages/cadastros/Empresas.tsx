@@ -8,23 +8,85 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { EmpresasList } from '@/components/empresa/EmpresasList';
 import { EmpresaFormModal } from '@/components/empresa/EmpresaFormModal';
+import { EmpresaViewModal } from '@/components/empresa/EmpresaViewModal';
+import { EmpresaDeleteDialog } from '@/components/empresa/EmpresaDeleteDialog';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Empresas() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedEmpresa, setSelectedEmpresa] = useState<any>(null);
+  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('todos');
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleAddEmpresa = () => {
-    setIsModalOpen(true);
+    setSelectedEmpresa(null);
+    setModalMode('create');
+    setIsFormModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleViewEmpresa = (empresa: any) => {
+    setSelectedEmpresa(empresa);
+    setIsViewModalOpen(true);
   };
 
-  const handleSuccess = () => {
-    setIsModalOpen(false);
-    // Aqui você pode adicionar lógica para atualizar a lista
+  const handleEditEmpresa = (empresa: any) => {
+    setSelectedEmpresa(empresa);
+    setModalMode('edit');
+    setIsFormModalOpen(true);
+  };
+
+  const handleDeleteEmpresa = (empresa: any) => {
+    setSelectedEmpresa(empresa);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleEditFromView = () => {
+    setIsViewModalOpen(false);
+    setModalMode('edit');
+    setIsFormModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    setLoading(true);
+    try {
+      // Aqui você implementaria a lógica para inativar a empresa
+      console.log('Inativando empresa:', selectedEmpresa?.id);
+      
+      toast({
+        title: 'Empresa inativada',
+        description: `${selectedEmpresa?.razao_social} foi inativada com sucesso.`,
+      });
+      
+      setIsDeleteDialogOpen(false);
+      setSelectedEmpresa(null);
+    } catch (error) {
+      console.error('Erro ao inativar empresa:', error);
+      toast({
+        title: 'Erro',
+        description: 'Erro ao inativar empresa. Tente novamente.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFormSuccess = () => {
+    setIsFormModalOpen(false);
+    setSelectedEmpresa(null);
+    // Aqui você atualizaria a lista de empresas
+  };
+
+  const handleCloseModals = () => {
+    setIsFormModalOpen(false);
+    setIsViewModalOpen(false);
+    setIsDeleteDialogOpen(false);
+    setSelectedEmpresa(null);
   };
 
   return (
@@ -87,7 +149,13 @@ export default function Empresas() {
                 </Select>
               </div>
 
-              <EmpresasList searchTerm={searchTerm} filterType={filterType} />
+              <EmpresasList 
+                searchTerm={searchTerm} 
+                filterType={filterType}
+                onView={handleViewEmpresa}
+                onEdit={handleEditEmpresa}
+                onDelete={handleDeleteEmpresa}
+              />
             </CardContent>
           </Card>
         </TabsContent>
@@ -110,10 +178,29 @@ export default function Empresas() {
         </TabsContent>
       </Tabs>
 
+      {/* Form Modal */}
       <EmpresaFormModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onSuccess={handleSuccess}
+        isOpen={isFormModalOpen}
+        onClose={handleCloseModals}
+        onSuccess={handleFormSuccess}
+        empresa={modalMode === 'edit' ? selectedEmpresa : undefined}
+      />
+
+      {/* View Modal */}
+      <EmpresaViewModal
+        isOpen={isViewModalOpen}
+        onClose={handleCloseModals}
+        onEdit={handleEditFromView}
+        empresa={selectedEmpresa}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <EmpresaDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={handleCloseModals}
+        onConfirm={handleConfirmDelete}
+        empresa={selectedEmpresa}
+        loading={loading}
       />
     </div>
   );
