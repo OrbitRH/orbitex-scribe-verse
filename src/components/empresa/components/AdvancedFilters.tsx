@@ -245,14 +245,14 @@ export function AdvancedFilters({
             <div className="space-y-2">
               <Label className="text-sm">CFOP</Label>
               <Select
-                value={filters.cfop || ''}
-                onValueChange={(value) => onFiltersChange({ ...filters, cfop: value || undefined })}
+                value={filters.cfop || 'todos'}
+                onValueChange={(value) => onFiltersChange({ ...filters, cfop: value === 'todos' ? undefined : value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecionar CFOP" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos</SelectItem>
+                  <SelectItem value="todos">Todos</SelectItem>
                   <SelectItem value="1102">1102 - Compra para comercialização</SelectItem>
                   <SelectItem value="5102">5102 - Venda de mercadoria</SelectItem>
                   <SelectItem value="1101">1101 - Compra para industrialização</SelectItem>
