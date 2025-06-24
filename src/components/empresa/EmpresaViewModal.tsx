@@ -6,6 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Edit } from 'lucide-react';
+import { useEmpresaHistory } from './hooks/useEmpresaHistory';
+import { HistoricoComprasTab } from './tabs/HistoricoComprasTab';
+import { HistoricoVendasTab } from './tabs/HistoricoVendasTab';
+import { PedidosOrdemTab } from './tabs/PedidosOrdemTab';
+import { ProdutosRelacionadosTab } from './tabs/ProdutosRelacionadosTab';
 
 interface EmpresaViewModalProps {
   isOpen: boolean;
@@ -15,6 +20,11 @@ interface EmpresaViewModalProps {
 }
 
 export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaViewModalProps) {
+  const { purchaseHistory, salesHistory, orders, relatedProducts, loading } = useEmpresaHistory(
+    empresa?.id || '',
+    empresa?.tipo_empresa || 'ambos'
+  );
+
   if (!empresa) return null;
 
   const getTipoEmpresaBadge = (tipo: string) => {
@@ -45,9 +55,13 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
     );
   };
 
+  // Determine which tabs to show based on company type
+  const showCompras = empresa.tipo_empresa === 'fornecedor' || empresa.tipo_empresa === 'ambos';
+  const showVendas = empresa.tipo_empresa === 'cliente' || empresa.tipo_empresa === 'ambos';
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -69,11 +83,14 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
         </DialogHeader>
 
         <Tabs defaultValue="identificacao" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-7 lg:grid-cols-7">
             <TabsTrigger value="identificacao">Identificação</TabsTrigger>
             <TabsTrigger value="contato">Contato</TabsTrigger>
             <TabsTrigger value="endereco">Endereço</TabsTrigger>
-            <TabsTrigger value="outros">Outros</TabsTrigger>
+            {showCompras && <TabsTrigger value="compras">Compras</TabsTrigger>}
+            {showVendas && <TabsTrigger value="vendas">Vendas</TabsTrigger>}
+            <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
+            <TabsTrigger value="produtos">Produtos</TabsTrigger>
           </TabsList>
 
           <TabsContent value="identificacao">
@@ -82,7 +99,7 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
                 <CardTitle>Informações de Identificação</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-600">Razão Social</label>
                     <p className="text-sm">{empresa.razao_social}</p>
@@ -110,7 +127,7 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
                 <CardTitle>Informações de Contato</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-600">E-mail</label>
                     <p className="text-sm">{empresa.email || '-'}</p>
@@ -130,7 +147,7 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
                 <CardTitle>Endereço</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-600">Cidade</label>
                     <p className="text-sm">{empresa.cidade || '-'}</p>
@@ -144,20 +161,36 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
             </Card>
           </TabsContent>
 
-          <TabsContent value="outros">
-            <Card>
-              <CardHeader>
-                <CardTitle>Outras Informações</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Situação</label>
-                    <p className="text-sm">{getSituacaoBadge(empresa.situacao)}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          {showCompras && (
+            <TabsContent value="compras">
+              <HistoricoComprasTab 
+                purchases={purchaseHistory}
+                loading={loading}
+              />
+            </TabsContent>
+          )}
+
+          {showVendas && (
+            <TabsContent value="vendas">
+              <HistoricoVendasTab 
+                sales={salesHistory}
+                loading={loading}
+              />
+            </TabsContent>
+          )}
+
+          <TabsContent value="pedidos">
+            <PedidosOrdemTab 
+              orders={orders}
+              loading={loading}
+            />
+          </TabsContent>
+
+          <TabsContent value="produtos">
+            <ProdutosRelacionadosTab 
+              products={relatedProducts}
+              loading={loading}
+            />
           </TabsContent>
         </Tabs>
       </DialogContent>
