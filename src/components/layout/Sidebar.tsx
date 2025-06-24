@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Home,
   Settings,
+  ChevronDown,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -112,61 +113,100 @@ export function Sidebar({ className }: SidebarProps) {
   const location = useLocation();
   const { hasRole } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
   const hasAccess = (item: any) => {
     return item.roles.some((role: AppRole) => hasRole(role));
   };
 
+  const toggleExpanded = (href: string) => {
+    setExpandedItems(prev => 
+      prev.includes(href) 
+        ? prev.filter(item => item !== href)
+        : [...prev, href]
+    );
+  };
+
+  const isExpanded = (href: string) => expandedItems.includes(href);
+
   return (
     <div
       className={cn(
-        'bg-white border-r border-gray-200 transition-all duration-300',
+        'bg-white border-r border-border transition-all duration-300 shadow-sm',
         collapsed ? 'w-16' : 'w-64',
         className
       )}
     >
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-border">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full justify-center"
+          className="w-full justify-center hover:bg-muted rounded-lg transition-colors"
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
       </div>
 
-      <nav className="p-4 space-y-2">
+      <nav className="p-3 space-y-1">
         {menuItems.map((item) => {
           if (!hasAccess(item)) return null;
 
           const Icon = item.icon;
           const isActive = location.pathname === item.href || 
                           (item.submenu && item.submenu.some(sub => location.pathname === sub.href));
+          const hasSubmenu = item.submenu && item.submenu.length > 0;
+          const isItemExpanded = isExpanded(item.href);
 
           return (
-            <div key={item.href}>
-              <Link to={item.href}>
-                <Button
-                  variant={isActive ? 'secondary' : 'ghost'}
-                  className={cn(
-                    'w-full justify-start',
-                    collapsed && 'justify-center px-2'
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  {!collapsed && <span className="ml-2">{item.title}</span>}
-                </Button>
-              </Link>
+            <div key={item.href} className="space-y-1">
+              <div className="flex items-center">
+                <Link to={item.href} className="flex-1">
+                  <Button
+                    variant={isActive ? 'secondary' : 'ghost'}
+                    className={cn(
+                      'w-full justify-start rounded-lg font-medium transition-all duration-200',
+                      collapsed ? 'justify-center px-2' : 'px-3',
+                      isActive 
+                        ? 'bg-primary/10 text-primary border-l-4 border-primary shadow-sm' 
+                        : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                    )}
+                  >
+                    <Icon className={cn('h-5 w-5', !collapsed && 'mr-3')} />
+                    {!collapsed && <span>{item.title}</span>}
+                  </Button>
+                </Link>
 
-              {!collapsed && item.submenu && isActive && (
-                <div className="ml-6 mt-2 space-y-1">
+                {!collapsed && hasSubmenu && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleExpanded(item.href)}
+                    className="ml-1 p-1 h-8 w-8 hover:bg-muted rounded-md"
+                  >
+                    <ChevronDown 
+                      className={cn(
+                        'h-4 w-4 transition-transform',
+                        isItemExpanded && 'rotate-180'
+                      )} 
+                    />
+                  </Button>
+                )}
+              </div>
+
+              {!collapsed && hasSubmenu && (isActive || isItemExpanded) && (
+                <div className="ml-8 space-y-1 border-l-2 border-muted pl-4">
                   {item.submenu.map((subItem) => (
                     <Link key={subItem.href} to={subItem.href}>
                       <Button
                         variant={location.pathname === subItem.href ? 'secondary' : 'ghost'}
                         size="sm"
-                        className="w-full justify-start"
+                        className={cn(
+                          'w-full justify-start text-sm rounded-md transition-colors',
+                          location.pathname === subItem.href
+                            ? 'bg-primary/10 text-primary font-medium'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                        )}
                       >
                         {subItem.title}
                       </Button>
