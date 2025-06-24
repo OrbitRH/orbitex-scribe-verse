@@ -4,9 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Search, Filter, Package, Shirt, Zap, Wrench, Package2 } from 'lucide-react';
-import ProductForm from '@/components/products/ProductForm';
+import ProductFormModal from '@/components/products/ProductFormModal';
 import ProductsList from '@/components/products/ProductsList';
 import ProductFilters from '@/components/products/ProductFilters';
 
@@ -14,6 +13,7 @@ export default function Produtos() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
 
   const tiposProduto = [
     {
@@ -55,15 +55,23 @@ export default function Produtos() {
 
   const handleProductSuccess = () => {
     setSelectedProduct(null);
+    setIsFormModalOpen(false);
     // Aqui poderia recarregar lista de produtos
   };
 
   const handleNewProduct = () => {
     setSelectedProduct(null);
+    setIsFormModalOpen(true);
   };
 
   const handleEditProduct = (product: any) => {
     setSelectedProduct(product);
+    setIsFormModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsFormModalOpen(false);
+    setSelectedProduct(null);
   };
 
   return (
@@ -110,67 +118,54 @@ export default function Produtos() {
         })}
       </div>
 
-      {/* Layout principal de duas colunas */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
-        {/* Coluna esquerda - Lista de produtos */}
-        <div className="lg:col-span-4 flex flex-col min-h-0">
-          <Card className="flex-1 flex flex-col">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center justify-between text-lg">
-                <span>Produtos Cadastrados</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowFilters(!showFilters)}
-                >
-                  <Filter className="h-4 w-4" />
-                </Button>
-              </CardTitle>
-              <div className="flex space-x-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Buscar produtos..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
+      {/* Lista de produtos expandida */}
+      <div className="flex-1 min-h-0">
+        <Card className="h-full flex flex-col">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between text-lg">
+              <span>Produtos Cadastrados</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Filter className="h-4 w-4" />
+              </Button>
+            </CardTitle>
+            <div className="flex space-x-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar produtos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9"
+                />
               </div>
-              {showFilters && (
-                <div className="mt-3">
-                  <ProductFilters />
-                </div>
-              )}
-            </CardHeader>
-            <CardContent className="flex-1 min-h-0 p-0">
-              <ProductsList
-                searchTerm={searchTerm}
-                selectedProduct={selectedProduct}
-                onSelectProduct={handleEditProduct}
-              />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Coluna direita - Formulário de cadastro/edição */}
-        <div className="lg:col-span-8 flex flex-col min-h-0">
-          <Card className="flex-1 flex flex-col">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Package className="h-5 w-5" />
-                {selectedProduct ? 'Editar Produto' : 'Novo Produto'}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 min-h-0 overflow-auto">
-              <ProductForm 
-                product={selectedProduct}
-                onSuccess={handleProductSuccess} 
-              />
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+            {showFilters && (
+              <div className="mt-3">
+                <ProductFilters />
+              </div>
+            )}
+          </CardHeader>
+          <CardContent className="flex-1 min-h-0 p-0">
+            <ProductsList
+              searchTerm={searchTerm}
+              selectedProduct={selectedProduct}
+              onSelectProduct={handleEditProduct}
+            />
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Modal do formulário */}
+      <ProductFormModal
+        isOpen={isFormModalOpen}
+        onClose={handleCloseModal}
+        product={selectedProduct}
+        onSuccess={handleProductSuccess}
+      />
     </div>
   );
 }

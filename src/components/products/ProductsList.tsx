@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Package, Shirt, Zap, Wrench, Package2, MoreVertical } from 'lucide-react';
+import { Package, Shirt, Zap, Wrench, Package2, MoreVertical, Edit, Copy, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import {
   DropdownMenu,
@@ -19,6 +19,7 @@ interface Product {
   codigo_interno: string;
   tipo_produto: string;
   situacao: boolean;
+  preco_sugerido_venda?: number;
   categoria?: {
     nome: string;
   };
@@ -76,6 +77,7 @@ export default function ProductsList({ searchTerm, selectedProduct, onSelectProd
           codigo_interno,
           tipo_produto,
           situacao,
+          preco_sugerido_venda,
           categoria:categorias_produtos(nome),
           unidade_medida:unidades_medida(codigo)
         `)
@@ -124,14 +126,21 @@ export default function ProductsList({ searchTerm, selectedProduct, onSelectProd
 
   if (loading) {
     return (
-      <div className="p-4 space-y-3">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="space-y-2">
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-3 w-1/2" />
-            <Skeleton className="h-3 w-1/4" />
-          </div>
-        ))}
+      <div className="p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[...Array(6)].map((_, i) => (
+            <Card key={i} className="p-4">
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+                <div className="flex space-x-2">
+                  <Skeleton className="h-5 w-16" />
+                  <Skeleton className="h-5 w-20" />
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     );
   }
@@ -139,14 +148,14 @@ export default function ProductsList({ searchTerm, selectedProduct, onSelectProd
   if (products.length === 0) {
     return (
       <div className="p-8 text-center">
-        <Package className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-        <p className="text-gray-500 mb-2">
+        <Package className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
           {searchTerm ? 'Nenhum produto encontrado' : 'Nenhum produto cadastrado ainda.'}
-        </p>
-        <p className="text-sm text-gray-400">
+        </h3>
+        <p className="text-gray-500 mb-4">
           {searchTerm 
-            ? 'Tente ajustar os termos de busca'
-            : 'Clique em "Novo Produto" para começar o cadastro.'
+            ? 'Tente ajustar os termos de busca ou limpar os filtros'
+            : 'Comece criando seu primeiro produto clicando no botão "Novo Produto" acima.'
           }
         </p>
       </div>
@@ -154,81 +163,94 @@ export default function ProductsList({ searchTerm, selectedProduct, onSelectProd
   }
 
   return (
-    <div className="divide-y">
-      {products.map((product) => {
-        const Icon = typeIcons[product.tipo_produto as keyof typeof typeIcons] || Package;
-        const isSelected = selectedProduct?.id === product.id;
-        
-        return (
-          <div
-            key={product.id}
-            className={`p-4 hover:bg-gray-50 cursor-pointer transition-colors ${
-              isSelected ? 'bg-blue-50 border-l-4 border-l-primary' : ''
-            }`}
-            onClick={() => onSelectProduct(product)}
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex items-start space-x-3 flex-1 min-w-0">
-                <Icon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h3 className="font-medium text-gray-900 truncate">
-                      {product.nome_comercial}
-                    </h3>
+    <div className="p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {products.map((product) => {
+          const Icon = typeIcons[product.tipo_produto as keyof typeof typeIcons] || Package;
+          const isSelected = selectedProduct?.id === product.id;
+          
+          return (
+            <Card
+              key={product.id}
+              className={`p-4 hover:shadow-md cursor-pointer transition-all ${
+                isSelected ? 'ring-2 ring-primary border-primary' : ''
+              }`}
+              onClick={() => onSelectProduct(product)}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center space-x-2">
+                  <Icon className="h-5 w-5 text-primary" />
+                  <div className="flex items-center space-x-1">
                     {!product.situacao && (
                       <Badge variant="secondary" className="text-xs">
                         Inativo
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600 mb-1">
-                    Código: {product.codigo_interno}
-                  </p>
-                  <div className="flex items-center space-x-2">
-                    <Badge 
-                      className={`text-xs ${typeColors[product.tipo_produto as keyof typeof typeColors]}`}
+                </div>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onSelectProduct(product); }}>
+                      <Edit className="h-4 w-4 mr-2" />
+                      Editar
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleDuplicate(product); }}>
+                      <Copy className="h-4 w-4 mr-2" />
+                      Duplicar
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={(e) => { e.stopPropagation(); handleDelete(product); }}
+                      className="text-red-600"
                     >
-                      {typeLabels[product.tipo_produto as keyof typeof typeLabels]}
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Excluir
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="font-medium text-gray-900 truncate">
+                  {product.nome_comercial}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  Código: {product.codigo_interno}
+                </p>
+                
+                {product.preco_sugerido_venda && (
+                  <p className="text-sm font-medium text-green-600">
+                    R$ {product.preco_sugerido_venda.toFixed(2)}
+                  </p>
+                )}
+
+                <div className="flex flex-wrap gap-1">
+                  <Badge 
+                    className={`text-xs ${typeColors[product.tipo_produto as keyof typeof typeColors]}`}
+                  >
+                    {typeLabels[product.tipo_produto as keyof typeof typeLabels]}
+                  </Badge>
+                  {product.categoria && (
+                    <Badge variant="outline" className="text-xs">
+                      {product.categoria.nome}
                     </Badge>
-                    {product.categoria && (
-                      <span className="text-xs text-gray-500">
-                        {product.categoria.nome}
-                      </span>
-                    )}
-                    {product.unidade_medida && (
-                      <span className="text-xs text-gray-500">
-                        {product.unidade_medida.codigo}
-                      </span>
-                    )}
-                  </div>
+                  )}
+                  {product.unidade_medida && (
+                    <Badge variant="outline" className="text-xs">
+                      {product.unidade_medida.codigo}
+                    </Badge>
+                  )}
                 </div>
               </div>
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => onSelectProduct(product)}>
-                    Editar
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleDuplicate(product)}>
-                    Duplicar
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={() => handleDelete(product)}
-                    className="text-red-600"
-                  >
-                    Excluir
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        );
-      })}
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 }
