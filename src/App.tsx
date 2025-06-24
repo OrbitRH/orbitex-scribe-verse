@@ -94,7 +94,7 @@ const App = () => (
             <Route path="/cadastros/funcoes" element={
               <AuthGuard requireRoles={['admin', 'gestor']}>
                 <Layout>
-                  <Setores />
+                  <Funcoes />
                 </Layout>
               </AuthGuard>
             } />

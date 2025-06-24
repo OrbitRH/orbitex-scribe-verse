@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      cargos: {
+        Row: {
+          ativo: boolean | null
+          codigo: string | null
+          competencias: Json | null
+          created_at: string | null
+          descricao: string | null
+          id: string
+          nivel_hierarquico: number | null
+          requisitos: string | null
+          salario_maximo: number | null
+          salario_minimo: number | null
+          titulo: string
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          codigo?: string | null
+          competencias?: Json | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nivel_hierarquico?: number | null
+          requisitos?: string | null
+          salario_maximo?: number | null
+          salario_minimo?: number | null
+          titulo: string
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          codigo?: string | null
+          competencias?: Json | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nivel_hierarquico?: number | null
+          requisitos?: string | null
+          salario_maximo?: number | null
+          salario_minimo?: number | null
+          titulo?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       categorias_produtos: {
         Row: {
           ativo: boolean
@@ -46,6 +91,318 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      colaboradores: {
+        Row: {
+          ativo: boolean | null
+          cargo_id: string | null
+          centro_custo_id: string | null
+          contatos_emergencia: Json | null
+          cpf: string | null
+          created_at: string | null
+          dados_bancarios: Json | null
+          data_admissao: string
+          data_demissao: string | null
+          data_nascimento: string | null
+          documentos: Json | null
+          email_corporativo: string | null
+          email_pessoal: string | null
+          endereco_completo: Json | null
+          endereco_emergencia: Json | null
+          estado_civil: Database["public"]["Enums"]["estado_civil"] | null
+          filial_id: string | null
+          foto_url: string | null
+          gestor_id: string | null
+          horario_trabalho_id: string | null
+          id: string
+          matricula: string | null
+          nacionalidade: string | null
+          naturalidade: string | null
+          nome_completo: string
+          observacoes: string | null
+          rg: string | null
+          salario_base: number | null
+          sexo: Database["public"]["Enums"]["sexo"] | null
+          status: Database["public"]["Enums"]["status_colaborador"] | null
+          telefone_principal: string | null
+          telefone_secundario: string | null
+          tipo_contrato: Database["public"]["Enums"]["tipo_contrato"]
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          cargo_id?: string | null
+          centro_custo_id?: string | null
+          contatos_emergencia?: Json | null
+          cpf?: string | null
+          created_at?: string | null
+          dados_bancarios?: Json | null
+          data_admissao: string
+          data_demissao?: string | null
+          data_nascimento?: string | null
+          documentos?: Json | null
+          email_corporativo?: string | null
+          email_pessoal?: string | null
+          endereco_completo?: Json | null
+          endereco_emergencia?: Json | null
+          estado_civil?: Database["public"]["Enums"]["estado_civil"] | null
+          filial_id?: string | null
+          foto_url?: string | null
+          gestor_id?: string | null
+          horario_trabalho_id?: string | null
+          id?: string
+          matricula?: string | null
+          nacionalidade?: string | null
+          naturalidade?: string | null
+          nome_completo: string
+          observacoes?: string | null
+          rg?: string | null
+          salario_base?: number | null
+          sexo?: Database["public"]["Enums"]["sexo"] | null
+          status?: Database["public"]["Enums"]["status_colaborador"] | null
+          telefone_principal?: string | null
+          telefone_secundario?: string | null
+          tipo_contrato: Database["public"]["Enums"]["tipo_contrato"]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          cargo_id?: string | null
+          centro_custo_id?: string | null
+          contatos_emergencia?: Json | null
+          cpf?: string | null
+          created_at?: string | null
+          dados_bancarios?: Json | null
+          data_admissao?: string
+          data_demissao?: string | null
+          data_nascimento?: string | null
+          documentos?: Json | null
+          email_corporativo?: string | null
+          email_pessoal?: string | null
+          endereco_completo?: Json | null
+          endereco_emergencia?: Json | null
+          estado_civil?: Database["public"]["Enums"]["estado_civil"] | null
+          filial_id?: string | null
+          foto_url?: string | null
+          gestor_id?: string | null
+          horario_trabalho_id?: string | null
+          id?: string
+          matricula?: string | null
+          nacionalidade?: string | null
+          naturalidade?: string | null
+          nome_completo?: string
+          observacoes?: string | null
+          rg?: string | null
+          salario_base?: number | null
+          sexo?: Database["public"]["Enums"]["sexo"] | null
+          status?: Database["public"]["Enums"]["status_colaborador"] | null
+          telefone_principal?: string | null
+          telefone_secundario?: string | null
+          tipo_contrato?: Database["public"]["Enums"]["tipo_contrato"]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "colaboradores_cargo_id_fkey"
+            columns: ["cargo_id"]
+            isOneToOne: false
+            referencedRelation: "cargos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "colaboradores_filial_id_fkey"
+            columns: ["filial_id"]
+            isOneToOne: false
+            referencedRelation: "filiais"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "colaboradores_gestor_id_fkey"
+            columns: ["gestor_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "colaboradores_horario_trabalho_id_fkey"
+            columns: ["horario_trabalho_id"]
+            isOneToOne: false
+            referencedRelation: "horarios_trabalho"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "colaboradores_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      colaboradores_beneficios: {
+        Row: {
+          ativo: boolean | null
+          colaborador_id: string | null
+          created_at: string | null
+          data_fim: string | null
+          data_inicio: string
+          id: string
+          observacoes: string | null
+          tipo_beneficio_id: string | null
+          updated_at: string | null
+          valor_desconto: number | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          colaborador_id?: string | null
+          created_at?: string | null
+          data_fim?: string | null
+          data_inicio: string
+          id?: string
+          observacoes?: string | null
+          tipo_beneficio_id?: string | null
+          updated_at?: string | null
+          valor_desconto?: number | null
+        }
+        Update: {
+          ativo?: boolean | null
+          colaborador_id?: string | null
+          created_at?: string | null
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          observacoes?: string | null
+          tipo_beneficio_id?: string | null
+          updated_at?: string | null
+          valor_desconto?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "colaboradores_beneficios_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "colaboradores_beneficios_tipo_beneficio_id_fkey"
+            columns: ["tipo_beneficio_id"]
+            isOneToOne: false
+            referencedRelation: "tipos_beneficios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      colaboradores_convenios: {
+        Row: {
+          ativo: boolean | null
+          colaborador_id: string | null
+          convenio_id: string | null
+          created_at: string | null
+          data_adesao: string
+          data_cancelamento: string | null
+          dependentes: Json | null
+          id: string
+          numero_carteira: string | null
+          observacoes: string | null
+          updated_at: string | null
+          valor_mensal: number | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          colaborador_id?: string | null
+          convenio_id?: string | null
+          created_at?: string | null
+          data_adesao: string
+          data_cancelamento?: string | null
+          dependentes?: Json | null
+          id?: string
+          numero_carteira?: string | null
+          observacoes?: string | null
+          updated_at?: string | null
+          valor_mensal?: number | null
+        }
+        Update: {
+          ativo?: boolean | null
+          colaborador_id?: string | null
+          convenio_id?: string | null
+          created_at?: string | null
+          data_adesao?: string
+          data_cancelamento?: string | null
+          dependentes?: Json | null
+          id?: string
+          numero_carteira?: string | null
+          observacoes?: string | null
+          updated_at?: string | null
+          valor_mensal?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "colaboradores_convenios_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "colaboradores_convenios_convenio_id_fkey"
+            columns: ["convenio_id"]
+            isOneToOne: false
+            referencedRelation: "convenios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      convenios: {
+        Row: {
+          ativo: boolean | null
+          contato: string | null
+          created_at: string | null
+          descricao: string | null
+          email: string | null
+          empresa_convenio: string | null
+          id: string
+          nome: string
+          site: string | null
+          telefone: string | null
+          termos_uso: string | null
+          tipo: Database["public"]["Enums"]["tipo_convenio"]
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          contato?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          email?: string | null
+          empresa_convenio?: string | null
+          id?: string
+          nome: string
+          site?: string | null
+          telefone?: string | null
+          termos_uso?: string | null
+          tipo: Database["public"]["Enums"]["tipo_convenio"]
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          contato?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          email?: string | null
+          empresa_convenio?: string | null
+          id?: string
+          nome?: string
+          site?: string | null
+          telefone?: string | null
+          termos_uso?: string | null
+          tipo?: Database["public"]["Enums"]["tipo_convenio"]
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       empresa_config: {
         Row: {
@@ -377,6 +734,106 @@ export type Database = {
           },
         ]
       }
+      horarios_trabalho: {
+        Row: {
+          ativo: boolean | null
+          carga_horaria_semanal: number | null
+          configuracao: Json | null
+          created_at: string | null
+          descricao: string | null
+          id: string
+          nome: string
+          tipo: Database["public"]["Enums"]["tipo_horario"]
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          carga_horaria_semanal?: number | null
+          configuracao?: Json | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nome: string
+          tipo: Database["public"]["Enums"]["tipo_horario"]
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          carga_horaria_semanal?: number | null
+          configuracao?: Json | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nome?: string
+          tipo?: Database["public"]["Enums"]["tipo_horario"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      justificativas_ponto: {
+        Row: {
+          anexos: Json | null
+          aprovado_por: string | null
+          colaborador_id: string | null
+          created_at: string | null
+          data_aprovacao: string | null
+          id: string
+          motivo: string
+          registro_ponto_id: string | null
+          status: Database["public"]["Enums"]["status_aprovacao"] | null
+          tipo: Database["public"]["Enums"]["tipo_justificativa"]
+          updated_at: string | null
+        }
+        Insert: {
+          anexos?: Json | null
+          aprovado_por?: string | null
+          colaborador_id?: string | null
+          created_at?: string | null
+          data_aprovacao?: string | null
+          id?: string
+          motivo: string
+          registro_ponto_id?: string | null
+          status?: Database["public"]["Enums"]["status_aprovacao"] | null
+          tipo: Database["public"]["Enums"]["tipo_justificativa"]
+          updated_at?: string | null
+        }
+        Update: {
+          anexos?: Json | null
+          aprovado_por?: string | null
+          colaborador_id?: string | null
+          created_at?: string | null
+          data_aprovacao?: string | null
+          id?: string
+          motivo?: string
+          registro_ponto_id?: string | null
+          status?: Database["public"]["Enums"]["status_aprovacao"] | null
+          tipo?: Database["public"]["Enums"]["tipo_justificativa"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "justificativas_ponto_aprovado_por_fkey"
+            columns: ["aprovado_por"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "justificativas_ponto_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "justificativas_ponto_registro_ponto_id_fkey"
+            columns: ["registro_ponto_id"]
+            isOneToOne: false
+            referencedRelation: "registros_ponto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       permissoes: {
         Row: {
           acao: string
@@ -640,6 +1097,81 @@ export type Database = {
         }
         Relationships: []
       }
+      registros_ponto: {
+        Row: {
+          aprovado_por: string | null
+          colaborador_id: string | null
+          created_at: string | null
+          data: string
+          data_aprovacao: string | null
+          entrada_manha: string | null
+          entrada_tarde: string | null
+          horas_extras: number | null
+          horas_trabalhadas: number | null
+          id: string
+          observacoes: string | null
+          saida_almoco: string | null
+          saida_noite: string | null
+          tipo_registro:
+            | Database["public"]["Enums"]["tipo_registro_ponto"]
+            | null
+          updated_at: string | null
+        }
+        Insert: {
+          aprovado_por?: string | null
+          colaborador_id?: string | null
+          created_at?: string | null
+          data: string
+          data_aprovacao?: string | null
+          entrada_manha?: string | null
+          entrada_tarde?: string | null
+          horas_extras?: number | null
+          horas_trabalhadas?: number | null
+          id?: string
+          observacoes?: string | null
+          saida_almoco?: string | null
+          saida_noite?: string | null
+          tipo_registro?:
+            | Database["public"]["Enums"]["tipo_registro_ponto"]
+            | null
+          updated_at?: string | null
+        }
+        Update: {
+          aprovado_por?: string | null
+          colaborador_id?: string | null
+          created_at?: string | null
+          data?: string
+          data_aprovacao?: string | null
+          entrada_manha?: string | null
+          entrada_tarde?: string | null
+          horas_extras?: number | null
+          horas_trabalhadas?: number | null
+          id?: string
+          observacoes?: string | null
+          saida_almoco?: string | null
+          saida_noite?: string | null
+          tipo_registro?:
+            | Database["public"]["Enums"]["tipo_registro_ponto"]
+            | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registros_ponto_aprovado_por_fkey"
+            columns: ["aprovado_por"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "registros_ponto_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       roles_customizados: {
         Row: {
           ativo: boolean | null
@@ -702,6 +1234,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tipos_beneficios: {
+        Row: {
+          ativo: boolean | null
+          categoria: Database["public"]["Enums"]["categoria_beneficio"]
+          created_at: string | null
+          descricao: string | null
+          id: string
+          nome: string
+          obrigatorio: boolean | null
+          tipo_desconto: Database["public"]["Enums"]["tipo_desconto"]
+          updated_at: string | null
+          valor_desconto: number | null
+          valor_empresa: number | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          categoria: Database["public"]["Enums"]["categoria_beneficio"]
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nome: string
+          obrigatorio?: boolean | null
+          tipo_desconto: Database["public"]["Enums"]["tipo_desconto"]
+          updated_at?: string | null
+          valor_desconto?: number | null
+          valor_empresa?: number | null
+        }
+        Update: {
+          ativo?: boolean | null
+          categoria?: Database["public"]["Enums"]["categoria_beneficio"]
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          nome?: string
+          obrigatorio?: boolean | null
+          tipo_desconto?: Database["public"]["Enums"]["tipo_desconto"]
+          updated_at?: string | null
+          valor_desconto?: number | null
+          valor_empresa?: number | null
+        }
+        Relationships: []
       }
       unidades_medida: {
         Row: {
@@ -805,14 +1379,60 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "gestor" | "colaborador" | "rh" | "financeiro"
+      categoria_beneficio:
+        | "saude"
+        | "alimentacao"
+        | "transporte"
+        | "educacao"
+        | "outros"
       controle_estoque: "padrao" | "grade" | "lote"
+      estado_civil:
+        | "solteiro"
+        | "casado"
+        | "divorciado"
+        | "viuvo"
+        | "uniao_estavel"
+      sexo: "masculino" | "feminino" | "outros"
+      status_aprovacao: "pendente" | "aprovado" | "rejeitado"
+      status_colaborador:
+        | "ativo"
+        | "inativo"
+        | "ferias"
+        | "licenca"
+        | "afastado"
+      tipo_centro_custo:
+        | "operacional"
+        | "administrativo"
+        | "comercial"
+        | "producao"
+      tipo_contrato: "clt" | "pj" | "estagiario" | "terceirizado" | "temporario"
+      tipo_convenio:
+        | "medico"
+        | "odontologico"
+        | "farmacia"
+        | "educacao"
+        | "outros"
+      tipo_desconto: "percentual" | "valor_fixo" | "sem_desconto"
       tipo_empresa: "cliente" | "fornecedor" | "ambos"
+      tipo_horario: "fixo" | "flexivel" | "home_office" | "hibrido"
+      tipo_justificativa:
+        | "atraso"
+        | "falta"
+        | "saida_antecipada"
+        | "horas_extras"
       tipo_produto:
         | "materia_prima"
         | "produto_acabado"
         | "em_processo"
         | "aviamento"
         | "servico"
+      tipo_registro_ponto:
+        | "normal"
+        | "falta"
+        | "falta_justificada"
+        | "ferias"
+        | "licenca"
+        | "feriado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -929,14 +1549,61 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "gestor", "colaborador", "rh", "financeiro"],
+      categoria_beneficio: [
+        "saude",
+        "alimentacao",
+        "transporte",
+        "educacao",
+        "outros",
+      ],
       controle_estoque: ["padrao", "grade", "lote"],
+      estado_civil: [
+        "solteiro",
+        "casado",
+        "divorciado",
+        "viuvo",
+        "uniao_estavel",
+      ],
+      sexo: ["masculino", "feminino", "outros"],
+      status_aprovacao: ["pendente", "aprovado", "rejeitado"],
+      status_colaborador: ["ativo", "inativo", "ferias", "licenca", "afastado"],
+      tipo_centro_custo: [
+        "operacional",
+        "administrativo",
+        "comercial",
+        "producao",
+      ],
+      tipo_contrato: ["clt", "pj", "estagiario", "terceirizado", "temporario"],
+      tipo_convenio: [
+        "medico",
+        "odontologico",
+        "farmacia",
+        "educacao",
+        "outros",
+      ],
+      tipo_desconto: ["percentual", "valor_fixo", "sem_desconto"],
       tipo_empresa: ["cliente", "fornecedor", "ambos"],
+      tipo_horario: ["fixo", "flexivel", "home_office", "hibrido"],
+      tipo_justificativa: [
+        "atraso",
+        "falta",
+        "saida_antecipada",
+        "horas_extras",
+      ],
       tipo_produto: [
         "materia_prima",
         "produto_acabado",
         "em_processo",
         "aviamento",
         "servico",
+      ],
+      tipo_registro_ponto: [
+        "normal",
+        "falta",
+        "falta_justificada",
+        "ferias",
+        "licenca",
+        "feriado",
       ],
     },
   },
