@@ -126,7 +126,7 @@ export function RoleCustomizadoForm({ role, permissoes, onSuccess }: RoleCustomi
     saveRoleMutation.mutate(data);
   };
 
-  // Agrupar permissões por módulo
+  // Agrupar permissões por módulo com verificação de tipo
   const permissoesPorModulo = Array.isArray(permissoes) ? permissoes.reduce((acc, permissao) => {
     const modulo = permissao.modulo;
     if (!acc[modulo]) {
@@ -227,7 +227,7 @@ export function RoleCustomizadoForm({ role, permissoes, onSuccess }: RoleCustomi
                       </CardHeader>
                       <CardContent className="pt-0">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {perms.map((permissao) => (
+                          {Array.isArray(perms) && perms.map((permissao) => (
                             <FormField
                               key={permissao.id}
                               control={form.control}

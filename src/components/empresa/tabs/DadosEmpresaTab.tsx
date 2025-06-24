@@ -73,8 +73,21 @@ export function DadosEmpresaTab() {
 
   const saveEmpresaMutation = useMutation({
     mutationFn: async (data: EmpresaFormData) => {
+      // Prepare data with required fields
       const empresaData = {
-        ...data,
+        razao_social: data.razao_social,
+        nome_fantasia: data.nome_fantasia || null,
+        cnpj: data.cnpj || null,
+        inscricao_estadual: data.inscricao_estadual || null,
+        inscricao_municipal: data.inscricao_municipal || null,
+        endereco: data.endereco || null,
+        cidade: data.cidade || null,
+        estado: data.estado || null,
+        cep: data.cep || null,
+        telefone: data.telefone || null,
+        email: data.email || null,
+        site: data.site || null,
+        regime_tributario: data.regime_tributario || 'simples_nacional',
         aliquota_padrao: data.aliquota_padrao ? parseFloat(data.aliquota_padrao) : 0,
       };
 

@@ -71,16 +71,32 @@ export function FilialForm({ filial, onSuccess }: FilialFormProps) {
 
   const saveFilialMutation = useMutation({
     mutationFn: async (data: FilialFormData) => {
+      // Prepare data with required fields
+      const filialData = {
+        codigo: data.codigo,
+        nome: data.nome,
+        cnpj: data.cnpj || null,
+        inscricao_estadual: data.inscricao_estadual || null,
+        endereco: data.endereco || null,
+        cidade: data.cidade || null,
+        estado: data.estado || null,
+        cep: data.cep || null,
+        telefone: data.telefone || null,
+        email: data.email || null,
+        matriz: data.matriz,
+        ativo: data.ativo,
+      };
+
       if (filial?.id) {
         const { error } = await supabase
           .from('filiais')
-          .update(data)
+          .update(filialData)
           .eq('id', filial.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('filiais')
-          .insert(data);
+          .insert(filialData);
         if (error) throw error;
       }
     },
