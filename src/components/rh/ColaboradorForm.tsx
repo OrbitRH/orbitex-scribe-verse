@@ -109,8 +109,9 @@ export function ColaboradorForm({ colaborador, onSubmit, onCancel, isLoading }: 
               {colaborador ? 'Editar Colaborador' : 'Novo Colaborador'}
             </CardTitle>
             <ProgressIndicator 
-              current={currentSectionIndex + 1} 
-              total={formSections.length}
+              progress={progress}
+              completedSections={currentSectionIndex}
+              totalSections={formSections.length}
               className="mt-4"
             />
           </CardHeader>

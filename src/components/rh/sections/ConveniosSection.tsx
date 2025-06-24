@@ -13,6 +13,19 @@ interface ConveniosSectionProps {
   form: UseFormReturn<any>;
 }
 
+interface Convenio {
+  id: string;
+  nome: string;
+  tipo: string;
+  empresa_convenio?: string;
+  descricao?: string;
+}
+
+interface ConvenioSelecionado extends Convenio {
+  numero_carteira: string;
+  data_adesao: string;
+}
+
 const iconMap = {
   medico: Heart,
   odontologico: Smile,
@@ -30,8 +43,8 @@ const colorMap = {
 };
 
 export function ConveniosSection({ form }: ConveniosSectionProps) {
-  const [convenios, setConvenios] = useState<any[]>([]);
-  const [selectedConvenios, setSelectedConvenios] = useState<any[]>([]);
+  const [convenios, setConvenios] = useState<Convenio[]>([]);
+  const [selectedConvenios, setSelectedConvenios] = useState<ConvenioSelecionado[]>([]);
 
   useEffect(() => {
     const fetchConvenios = async () => {
@@ -42,7 +55,7 @@ export function ConveniosSection({ form }: ConveniosSectionProps) {
           .eq('ativo', true)
           .order('tipo', { ascending: true });
 
-        if (data) setConvenios(data);
+        if (data) setConvenios(data as Convenio[]);
       } catch (error) {
         console.error('Erro ao carregar convênios:', error);
       }
@@ -57,9 +70,9 @@ export function ConveniosSection({ form }: ConveniosSectionProps) {
     }
     acc[convenio.tipo].push(convenio);
     return acc;
-  }, {} as Record<string, any[]>);
+  }, {} as Record<string, Convenio[]>);
 
-  const handleConvenioToggle = (convenio: any, checked: boolean) => {
+  const handleConvenioToggle = (convenio: Convenio, checked: boolean) => {
     if (checked) {
       setSelectedConvenios([...selectedConvenios, { ...convenio, numero_carteira: '', data_adesao: '' }]);
     } else {

@@ -12,6 +12,17 @@ interface BeneficiosSectionProps {
   form: UseFormReturn<any>;
 }
 
+interface TipoBeneficio {
+  id: string;
+  nome: string;
+  descricao?: string;
+  categoria: string;
+  valor_empresa?: number;
+  valor_desconto?: number;
+  tipo_desconto?: string;
+  obrigatorio?: boolean;
+}
+
 const iconMap = {
   saude: Heart,
   alimentacao: Gift,
@@ -29,7 +40,7 @@ const colorMap = {
 };
 
 export function BeneficiosSection({ form }: BeneficiosSectionProps) {
-  const [beneficios, setBeneficios] = useState<any[]>([]);
+  const [beneficios, setBeneficios] = useState<TipoBeneficio[]>([]);
   const [selectedBeneficios, setSelectedBeneficios] = useState<string[]>([]);
 
   useEffect(() => {
@@ -41,7 +52,7 @@ export function BeneficiosSection({ form }: BeneficiosSectionProps) {
           .eq('ativo', true)
           .order('categoria', { ascending: true });
 
-        if (data) setBeneficios(data);
+        if (data) setBeneficios(data as TipoBeneficio[]);
       } catch (error) {
         console.error('Erro ao carregar benefícios:', error);
       }
@@ -56,7 +67,7 @@ export function BeneficiosSection({ form }: BeneficiosSectionProps) {
     }
     acc[beneficio.categoria].push(beneficio);
     return acc;
-  }, {} as Record<string, any[]>);
+  }, {} as Record<string, TipoBeneficio[]>);
 
   const handleBeneficioToggle = (beneficioId: string, checked: boolean) => {
     if (checked) {
@@ -112,10 +123,10 @@ export function BeneficiosSection({ form }: BeneficiosSectionProps) {
                           <p className="text-sm text-slate-600 mt-1">{beneficio.descricao}</p>
                         )}
                         <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
-                          {beneficio.valor_empresa > 0 && (
+                          {beneficio.valor_empresa && beneficio.valor_empresa > 0 && (
                             <span>Empresa: R$ {beneficio.valor_empresa.toFixed(2)}</span>
                           )}
-                          {beneficio.valor_desconto > 0 && (
+                          {beneficio.valor_desconto && beneficio.valor_desconto > 0 && (
                             <span>
                               Desconto: {beneficio.tipo_desconto === 'percentual' ? `${beneficio.valor_desconto}%` : `R$ ${beneficio.valor_desconto.toFixed(2)}`}
                             </span>
