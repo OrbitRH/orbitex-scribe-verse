@@ -5,11 +5,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Users, UserPlus, Edit, Trash2 } from 'lucide-react';
+import { Users, Edit } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { UserRoleForm } from '@/components/empresa/forms/UserRoleForm';
+import { AppRole } from '@/types/auth';
 
 export function UsuariosTab() {
   const { toast } = useToast();
@@ -36,24 +37,8 @@ export function UsuariosTab() {
     },
   });
 
-  const { data: roles } = useQuery({
-    queryKey: ['user-roles-list'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .order('role');
-      
-      if (error) throw error;
-      
-      // Criar lista única de roles
-      const uniqueRoles = [...new Set(data.map(r => r.role))];
-      return uniqueRoles;
-    },
-  });
-
   const deleteUserRoleMutation = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: string }) => {
+    mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
       const { error } = await supabase
         .from('user_roles')
         .delete()
@@ -83,7 +68,7 @@ export function UsuariosTab() {
     setIsDialogOpen(true);
   };
 
-  const handleRemoveRole = (userId: string, role: string) => {
+  const handleRemoveRole = (userId: string, role: AppRole) => {
     if (confirm(`Tem certeza que deseja remover o role "${role}" deste usuário?`)) {
       deleteUserRoleMutation.mutate({ userId, role });
     }
@@ -150,7 +135,7 @@ export function UsuariosTab() {
                   <TableCell>{usuario.email}</TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {usuario.user_roles?.map((userRole: any, index: number) => (
+                      {Array.isArray(usuario.user_roles) && usuario.user_roles.map((userRole: any, index: number) => (
                         <Badge
                           key={index}
                           className={getRoleColor(userRole.role)}
@@ -161,13 +146,13 @@ export function UsuariosTab() {
                             variant="ghost"
                             size="sm"
                             className="h-4 w-4 p-0 ml-1 hover:bg-red-200"
-                            onClick={() => handleRemoveRole(usuario.id, userRole.role)}
+                            onClick={() => handleRemoveRole(usuario.id, userRole.role as AppRole)}
                           >
                             ×
                           </Button>
                         </Badge>
                       ))}
-                      {(!usuario.user_roles || usuario.user_roles.length === 0) && (
+                      {(!usuario.user_roles || !Array.isArray(usuario.user_roles) || usuario.user_roles.length === 0) && (
                         <Badge variant="outline">Sem roles</Badge>
                       )}
                     </div>

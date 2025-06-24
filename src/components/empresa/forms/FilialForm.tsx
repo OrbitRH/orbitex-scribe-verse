@@ -80,7 +80,7 @@ export function FilialForm({ filial, onSuccess }: FilialFormProps) {
       } else {
         const { error } = await supabase
           .from('filiais')
-          .insert([data]);
+          .insert(data);
         if (error) throw error;
       }
     },
@@ -273,7 +273,7 @@ export function FilialForm({ filial, onSuccess }: FilialFormProps) {
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    disabled={filial?.matriz} // Não permite desmarcar se já é matriz
+                    disabled={filial?.matriz}
                   />
                 </FormControl>
               </FormItem>

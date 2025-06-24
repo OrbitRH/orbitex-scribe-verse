@@ -127,14 +127,14 @@ export function RoleCustomizadoForm({ role, permissoes, onSuccess }: RoleCustomi
   };
 
   // Agrupar permissões por módulo
-  const permissoesPorModulo = permissoes.reduce((acc, permissao) => {
+  const permissoesPorModulo = Array.isArray(permissoes) ? permissoes.reduce((acc, permissao) => {
     const modulo = permissao.modulo;
     if (!acc[modulo]) {
       acc[modulo] = [];
     }
     acc[modulo].push(permissao);
     return acc;
-  }, {} as Record<string, any[]>);
+  }, {} as Record<string, any[]>) : {};
 
   return (
     <Form {...form}>
