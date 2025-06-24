@@ -47,6 +47,75 @@ export type Database = {
           },
         ]
       }
+      empresa_config: {
+        Row: {
+          aliquota_padrao: number | null
+          cep: string | null
+          cidade: string | null
+          cnpj: string | null
+          configuracoes_fiscais: Json | null
+          created_at: string
+          email: string | null
+          endereco: string | null
+          estado: string | null
+          id: string
+          inscricao_estadual: string | null
+          inscricao_municipal: string | null
+          logo_url: string | null
+          nome_fantasia: string | null
+          parametros_sistema: Json | null
+          razao_social: string
+          regime_tributario: string | null
+          site: string | null
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          aliquota_padrao?: number | null
+          cep?: string | null
+          cidade?: string | null
+          cnpj?: string | null
+          configuracoes_fiscais?: Json | null
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          inscricao_estadual?: string | null
+          inscricao_municipal?: string | null
+          logo_url?: string | null
+          nome_fantasia?: string | null
+          parametros_sistema?: Json | null
+          razao_social: string
+          regime_tributario?: string | null
+          site?: string | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          aliquota_padrao?: number | null
+          cep?: string | null
+          cidade?: string | null
+          cnpj?: string | null
+          configuracoes_fiscais?: Json | null
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          inscricao_estadual?: string | null
+          inscricao_municipal?: string | null
+          logo_url?: string | null
+          nome_fantasia?: string | null
+          parametros_sistema?: Json | null
+          razao_social?: string
+          regime_tributario?: string | null
+          site?: string | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       empresas: {
         Row: {
           ativo: boolean
@@ -203,6 +272,63 @@ export type Database = {
           },
         ]
       }
+      filiais: {
+        Row: {
+          ativo: boolean | null
+          cep: string | null
+          cidade: string | null
+          cnpj: string | null
+          codigo: string
+          configuracoes_especificas: Json | null
+          created_at: string
+          email: string | null
+          endereco: string | null
+          estado: string | null
+          id: string
+          inscricao_estadual: string | null
+          matriz: boolean | null
+          nome: string
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          cep?: string | null
+          cidade?: string | null
+          cnpj?: string | null
+          codigo: string
+          configuracoes_especificas?: Json | null
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          inscricao_estadual?: string | null
+          matriz?: boolean | null
+          nome: string
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean | null
+          cep?: string | null
+          cidade?: string | null
+          cnpj?: string | null
+          codigo?: string
+          configuracoes_especificas?: Json | null
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          inscricao_estadual?: string | null
+          matriz?: boolean | null
+          nome?: string
+          telefone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       historico_precos: {
         Row: {
           created_at: string
@@ -250,6 +376,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      permissoes: {
+        Row: {
+          acao: string
+          ativo: boolean | null
+          created_at: string
+          descricao: string | null
+          id: string
+          modulo: string
+          nome: string
+        }
+        Insert: {
+          acao: string
+          ativo?: boolean | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          modulo: string
+          nome: string
+        }
+        Update: {
+          acao?: string
+          ativo?: boolean | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          modulo?: string
+          nome?: string
+        }
+        Relationships: []
       }
       produtos: {
         Row: {
@@ -484,6 +640,69 @@ export type Database = {
         }
         Relationships: []
       }
+      roles_customizados: {
+        Row: {
+          ativo: boolean | null
+          cor: string | null
+          created_at: string
+          descricao: string | null
+          id: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          cor?: string | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean | null
+          cor?: string | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      roles_permissoes: {
+        Row: {
+          id: string
+          permissao_id: string | null
+          role_id: string | null
+        }
+        Insert: {
+          id?: string
+          permissao_id?: string | null
+          role_id?: string | null
+        }
+        Update: {
+          id?: string
+          permissao_id?: string | null
+          role_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roles_permissoes_permissao_id_fkey"
+            columns: ["permissao_id"]
+            isOneToOne: false
+            referencedRelation: "permissoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roles_permissoes_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles_customizados"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       unidades_medida: {
         Row: {
           ativo: boolean
@@ -534,6 +753,38 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      usuarios_filiais: {
+        Row: {
+          ativo: boolean | null
+          created_at: string
+          filial_id: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          created_at?: string
+          filial_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          created_at?: string
+          filial_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usuarios_filiais_filial_id_fkey"
+            columns: ["filial_id"]
+            isOneToOne: false
+            referencedRelation: "filiais"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

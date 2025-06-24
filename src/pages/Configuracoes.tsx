@@ -1,6 +1,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Settings, Users, Shield, Database } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Settings, Users, Shield, Database, Building2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Configuracoes() {
   return (
@@ -13,6 +15,28 @@ export default function Configuracoes() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Building2 className="h-5 w-5 mr-2 text-blue-600" />
+              Empresa
+            </CardTitle>
+            <CardDescription>
+              Configurações da empresa, filiais, usuários e permissões.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              Gerencie dados da empresa, filiais, usuários e sistema de permissões.
+            </p>
+            <Link to="/configuracoes/empresa">
+              <Button className="w-full">
+                Acessar Configurações da Empresa
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">

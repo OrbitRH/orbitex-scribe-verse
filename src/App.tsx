@@ -28,6 +28,7 @@ import Comercial from "./pages/Comercial";
 import Relatorios from "./pages/Relatorios";
 import Fiscal from "./pages/Fiscal";
 import Configuracoes from "./pages/Configuracoes";
+import Empresa from "./pages/configuracoes/Empresa";
 
 const queryClient = new QueryClient();
 
@@ -178,6 +179,15 @@ const App = () => (
               <AuthGuard requireRoles={['admin']}>
                 <Layout>
                   <Configuracoes />
+                </Layout>
+              </AuthGuard>
+            } />
+            
+            {/* Nova rota para Empresa */}
+            <Route path="/configuracoes/empresa" element={
+              <AuthGuard requireRoles={['admin']}>
+                <Layout>
+                  <Empresa />
                 </Layout>
               </AuthGuard>
             } />
