@@ -6,10 +6,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { productSchema, ProductFormData } from '../types/ProductFormData';
 
-export function useProductForm(onSuccess: () => void) {
+export function useProductForm(onSuccess: () => void, product?: any) {
   const [loading, setLoading] = useState(false);
   const [categorias, setCategorias] = useState<any[]>([]);
   const [unidades, setUnidades] = useState<any[]>([]);
+  const [completedSections, setCompletedSections] = useState<string[]>([]);
   const { toast } = useToast();
 
   const form = useForm<ProductFormData>({
@@ -21,6 +22,7 @@ export function useProductForm(onSuccess: () => void) {
       peso_bruto: 0,
       peso_liquido: 0,
       perda_tecnica_percent: 0,
+      ...product,
     },
   });
 
@@ -28,6 +30,45 @@ export function useProductForm(onSuccess: () => void) {
     fetchCategorias();
     fetchUnidades();
   }, []);
+
+  useEffect(() => {
+    // Watch form changes to update completed sections
+    const subscription = form.watch((values) => {
+      updateCompletedSections(values);
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
+
+  const updateCompletedSections = (values: Partial<ProductFormData>) => {
+    const completed: string[] = [];
+
+    // Seção básica (obrigatória)
+    if (values.nome_comercial && values.codigo_interno && values.tipo_produto && values.unidade_medida_id) {
+      completed.push('basico');
+    }
+
+    // Seção técnica
+    if (values.ncm || values.cfop_padrao || values.peso_bruto || values.comprimento) {
+      completed.push('tecnico');
+    }
+
+    // Seção estoque
+    if (values.controle_estoque || values.controla_lote || values.validade_dias) {
+      completed.push('estoque');
+    }
+
+    // Seção grades
+    if (values.controla_grade) {
+      completed.push('grades');
+    }
+
+    // Seção comercial
+    if (values.preco_medio_compra || values.preco_sugerido_venda || values.markup_padrao) {
+      completed.push('comercial');
+    }
+
+    setCompletedSections(completed);
+  };
 
   const fetchCategorias = async () => {
     const { data, error } = await supabase
@@ -56,7 +97,6 @@ export function useProductForm(onSuccess: () => void) {
   const onSubmit = async (data: ProductFormData) => {
     setLoading(true);
     try {
-      // Prepare data for Supabase insertion, ensuring all required fields are present
       const insertData = {
         nome_comercial: data.nome_comercial,
         nome_tecnico: data.nome_tecnico || null,
@@ -85,21 +125,34 @@ export function useProductForm(onSuccess: () => void) {
         descricao: data.descricao || null,
       };
 
-      const { error } = await supabase
-        .from('produtos')
-        .insert(insertData);
+      let error;
+
+      if (product?.id) {
+        // Update existing product
+        const result = await supabase
+          .from('produtos')
+          .update(insertData)
+          .eq('id', product.id);
+        error = result.error;
+      } else {
+        // Insert new product
+        const result = await supabase
+          .from('produtos')
+          .insert(insertData);
+        error = result.error;
+      }
 
       if (error) throw error;
 
       toast({
-        title: "Produto cadastrado com sucesso!",
-        description: "O produto foi salvo no sistema.",
+        title: product ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!",
+        description: "As informações foram salvas no sistema.",
       });
 
       onSuccess();
     } catch (error: any) {
       toast({
-        title: "Erro ao cadastrar produto",
+        title: "Erro ao salvar produto",
         description: error.message,
         variant: "destructive",
       });
@@ -113,6 +166,7 @@ export function useProductForm(onSuccess: () => void) {
     loading,
     categorias,
     unidades,
+    completedSections,
     onSubmit: form.handleSubmit(onSubmit),
   };
 }
