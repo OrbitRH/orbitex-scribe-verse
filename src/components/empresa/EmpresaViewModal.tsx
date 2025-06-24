@@ -3,13 +3,13 @@ import React from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Edit } from 'lucide-react';
+import { Edit, User, ShoppingCart, ShoppingBag, Package, FileText } from 'lucide-react';
 import { useEmpresaHistory } from './hooks/useEmpresaHistory';
-import { HistoricoComprasTab } from './tabs/HistoricoComprasTab';
-import { HistoricoVendasTab } from './tabs/HistoricoVendasTab';
+import { DadosGeraisTab } from './tabs/DadosGeraisTab';
+import { ComprasTab } from './tabs/ComprasTab';
+import { VendasTab } from './tabs/VendasTab';
 import { PedidosOrdemTab } from './tabs/PedidosOrdemTab';
 import { ProdutosRelacionadosTab } from './tabs/ProdutosRelacionadosTab';
 
@@ -60,23 +60,25 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
   const showCompras = empresa.tipo_empresa === 'fornecedor' || empresa.tipo_empresa === 'ambos';
   const showVendas = empresa.tipo_empresa === 'cliente' || empresa.tipo_empresa === 'ambos';
 
+  const tabsCount = 3 + (showCompras ? 1 : 0) + (showVendas ? 1 : 0);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl h-[85vh] flex flex-col">
-        <DialogHeader className="flex-shrink-0 pb-4">
+      <DialogContent className="max-w-7xl h-[85vh] flex flex-col bg-gradient-to-br from-slate-50 to-blue-50/20">
+        <DialogHeader className="flex-shrink-0 pb-4 border-b border-slate-200/50">
           <div className="flex items-center justify-between">
             <div>
-              <DialogTitle className="flex items-center gap-3">
+              <DialogTitle className="flex items-center gap-3 text-slate-800">
                 {empresa.razao_social}
                 {getTipoEmpresaBadge(empresa.tipo_empresa)}
                 {getSituacaoBadge(empresa.situacao)}
               </DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="text-slate-600">
                 {empresa.nome_fantasia && `${empresa.nome_fantasia} • `}
                 {empresa.cnpj}
               </DialogDescription>
             </div>
-            <Button onClick={onEdit} size="sm">
+            <Button onClick={onEdit} size="sm" className="bg-slate-700 hover:bg-slate-800">
               <Edit className="h-4 w-4 mr-2" />
               Editar
             </Button>
@@ -84,96 +86,46 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
         </DialogHeader>
 
         <div className="flex-1 flex flex-col overflow-hidden">
-          <Tabs defaultValue="identificacao" className="flex-1 flex flex-col">
-            <TabsList className="flex-shrink-0 grid w-full grid-cols-7 lg:grid-cols-7 mb-4">
-              <TabsTrigger value="identificacao">Identificação</TabsTrigger>
-              <TabsTrigger value="contato">Contato</TabsTrigger>
-              <TabsTrigger value="endereco">Endereço</TabsTrigger>
-              {showCompras && <TabsTrigger value="compras">Compras</TabsTrigger>}
-              {showVendas && <TabsTrigger value="vendas">Vendas</TabsTrigger>}
-              <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
-              <TabsTrigger value="produtos">Produtos</TabsTrigger>
+          <Tabs defaultValue="dados-gerais" className="flex-1 flex flex-col">
+            <TabsList className={`flex-shrink-0 grid w-full grid-cols-${tabsCount} mb-4 bg-white/50 backdrop-blur-sm border border-slate-200/50`}>
+              <TabsTrigger value="dados-gerais" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-800">
+                <User className="h-4 w-4" />
+                Dados Gerais
+              </TabsTrigger>
+              {showCompras && (
+                <TabsTrigger value="compras" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-800">
+                  <ShoppingCart className="h-4 w-4" />
+                  Compras
+                </TabsTrigger>
+              )}
+              {showVendas && (
+                <TabsTrigger value="vendas" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-800">
+                  <ShoppingBag className="h-4 w-4" />
+                  Vendas
+                </TabsTrigger>
+              )}
+              <TabsTrigger value="pedidos" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-800">
+                <FileText className="h-4 w-4" />
+                Pedidos
+              </TabsTrigger>
+              <TabsTrigger value="produtos" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-slate-800">
+                <Package className="h-4 w-4" />
+                Produtos
+              </TabsTrigger>
             </TabsList>
 
             <div className="flex-1 overflow-hidden">
-              <TabsContent value="identificacao" className="h-full m-0">
+              <TabsContent value="dados-gerais" className="h-full m-0">
                 <ScrollArea className="h-full">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Informações de Identificação</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">Razão Social</label>
-                          <p className="text-sm">{empresa.razao_social}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">Nome Fantasia</label>
-                          <p className="text-sm">{empresa.nome_fantasia || '-'}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">CNPJ</label>
-                          <p className="text-sm font-mono">{empresa.cnpj}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">Tipo</label>
-                          <p className="text-sm">{getTipoEmpresaBadge(empresa.tipo_empresa)}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </ScrollArea>
-              </TabsContent>
-
-              <TabsContent value="contato" className="h-full m-0">
-                <ScrollArea className="h-full">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Informações de Contato</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">E-mail</label>
-                          <p className="text-sm">{empresa.email || '-'}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">Telefone</label>
-                          <p className="text-sm">{empresa.telefone || '-'}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </ScrollArea>
-              </TabsContent>
-
-              <TabsContent value="endereco" className="h-full m-0">
-                <ScrollArea className="h-full">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Endereço</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">Cidade</label>
-                          <p className="text-sm">{empresa.cidade || '-'}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-600">Estado</label>
-                          <p className="text-sm">{empresa.estado || '-'}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <DadosGeraisTab empresa={empresa} />
                 </ScrollArea>
               </TabsContent>
 
               {showCompras && (
                 <TabsContent value="compras" className="h-full m-0">
-                  <HistoricoComprasTab 
+                  <ComprasTab 
                     notasFiscais={notasFiscaisCompra}
+                    orders={orders}
                     loading={loading}
                   />
                 </TabsContent>
@@ -181,29 +133,34 @@ export function EmpresaViewModal({ isOpen, onClose, onEdit, empresa }: EmpresaVi
 
               {showVendas && (
                 <TabsContent value="vendas" className="h-full m-0">
-                  <HistoricoVendasTab 
+                  <VendasTab 
                     notasFiscais={notasFiscaisVenda}
+                    orders={orders}
                     loading={loading}
                   />
                 </TabsContent>
               )}
 
               <TabsContent value="pedidos" className="h-full m-0">
-                <ScrollArea className="h-full">
-                  <PedidosOrdemTab 
-                    orders={orders}
-                    loading={loading}
-                  />
-                </ScrollArea>
+                <div className="p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 h-full">
+                  <ScrollArea className="h-full">
+                    <PedidosOrdemTab 
+                      orders={orders}
+                      loading={loading}
+                    />
+                  </ScrollArea>
+                </div>
               </TabsContent>
 
               <TabsContent value="produtos" className="h-full m-0">
-                <ScrollArea className="h-full">
-                  <ProdutosRelacionadosTab 
-                    products={relatedProducts}
-                    loading={loading}
-                  />
-                </ScrollArea>
+                <div className="p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 h-full">
+                  <ScrollArea className="h-full">
+                    <ProdutosRelacionadosTab 
+                      products={relatedProducts}
+                      loading={loading}
+                    />
+                  </ScrollArea>
+                </div>
               </TabsContent>
             </div>
           </Tabs>
