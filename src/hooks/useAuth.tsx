@@ -4,16 +4,18 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
+type AppRole = 'admin' | 'gestor' | 'colaborador' | 'rh' | 'financeiro';
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: any | null;
-  userRoles: string[];
+  userRoles: AppRole[];
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error?: any }>;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error?: any }>;
   signOut: () => Promise<void>;
-  hasRole: (role: string) => boolean;
+  hasRole: (role: AppRole) => boolean;
   isAdmin: boolean;
 }
 
@@ -48,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .from('user_roles')
         .select('role')
         .eq('user_id', user.id);
-      return data?.map(r => r.role) || [];
+      return (data?.map(r => r.role as AppRole) || []) as AppRole[];
     },
     enabled: !!user?.id,
   });
@@ -101,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await supabase.auth.signOut();
   };
 
-  const hasRole = (role: string) => {
+  const hasRole = (role: AppRole) => {
     return userRoles.includes(role);
   };
 
