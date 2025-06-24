@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { AppRole } from '@/types/auth';
 import {
   Package,
   Users,
@@ -29,13 +30,13 @@ const menuItems = [
     title: 'Dashboard',
     icon: Home,
     href: '/',
-    roles: ['admin', 'gestor', 'colaborador', 'rh', 'financeiro'],
+    roles: ['admin', 'gestor', 'colaborador', 'rh', 'financeiro'] as AppRole[],
   },
   {
     title: 'Cadastros',
     icon: Package,
     href: '/cadastros',
-    roles: ['admin', 'gestor'],
+    roles: ['admin', 'gestor'] as AppRole[],
     submenu: [
       { title: 'Produtos', href: '/cadastros/produtos' },
       { title: 'Colaboradores', href: '/cadastros/colaboradores' },
@@ -47,55 +48,55 @@ const menuItems = [
     title: 'Estoque',
     icon: Warehouse,
     href: '/estoque',
-    roles: ['admin', 'gestor', 'colaborador'],
+    roles: ['admin', 'gestor', 'colaborador'] as AppRole[],
   },
   {
     title: 'PCP',
     icon: ClipboardList,
     href: '/pcp',
-    roles: ['admin', 'gestor', 'colaborador'],
+    roles: ['admin', 'gestor', 'colaborador'] as AppRole[],
   },
   {
     title: 'Tarefas',
     icon: Clock,
     href: '/tarefas',
-    roles: ['admin', 'gestor', 'colaborador'],
+    roles: ['admin', 'gestor', 'colaborador'] as AppRole[],
   },
   {
     title: 'RH',
     icon: Users,
     href: '/rh',
-    roles: ['admin', 'rh', 'gestor'],
+    roles: ['admin', 'rh', 'gestor'] as AppRole[],
   },
   {
     title: 'Financeiro',
     icon: DollarSign,
     href: '/financeiro',
-    roles: ['admin', 'financeiro', 'gestor'],
+    roles: ['admin', 'financeiro', 'gestor'] as AppRole[],
   },
   {
     title: 'Comercial',
     icon: ShoppingCart,
     href: '/comercial',
-    roles: ['admin', 'gestor'],
+    roles: ['admin', 'gestor'] as AppRole[],
   },
   {
     title: 'Relatórios',
     icon: BarChart3,
     href: '/relatorios',
-    roles: ['admin', 'gestor', 'financeiro'],
+    roles: ['admin', 'gestor', 'financeiro'] as AppRole[],
   },
   {
     title: 'Fiscal',
     icon: FileText,
     href: '/fiscal',
-    roles: ['admin', 'financeiro'],
+    roles: ['admin', 'financeiro'] as AppRole[],
   },
   {
     title: 'Configurações',
     icon: Settings,
     href: '/configuracoes',
-    roles: ['admin'],
+    roles: ['admin'] as AppRole[],
   },
 ];
 
@@ -105,7 +106,7 @@ export function Sidebar({ className }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   const hasAccess = (item: any) => {
-    return item.roles.some((role: string) => hasRole(role));
+    return item.roles.some((role: AppRole) => hasRole(role));
   };
 
   return (

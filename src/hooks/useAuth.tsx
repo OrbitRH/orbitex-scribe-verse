@@ -1,10 +1,8 @@
-
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-
-type AppRole = 'admin' | 'gestor' | 'colaborador' | 'rh' | 'financeiro';
+import { AppRole } from '@/types/auth';
 
 interface AuthContextType {
   user: User | null;

@@ -1,10 +1,11 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
+import { AppRole } from '@/types/auth';
 
 interface AuthGuardProps {
   children: React.ReactNode;
-  requireRoles?: string[];
+  requireRoles?: AppRole[];
 }
 
 export function AuthGuard({ children, requireRoles = [] }: AuthGuardProps) {
