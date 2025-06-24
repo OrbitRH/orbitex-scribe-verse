@@ -1,115 +1,30 @@
 
-import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { Shield, Plus, Edit, Trash2 } from 'lucide-react';
+import { Shield, Plus } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RoleCustomizadoForm } from '@/components/empresa/forms/RoleCustomizadoForm';
+import { usePermissoesTab } from '@/components/empresa/hooks/usePermissoesTab';
+import { RolesCustomizadosTable } from '@/components/empresa/components/RolesCustomizadosTable';
+import { EmptyRolesState } from '@/components/empresa/components/EmptyRolesState';
+import { PermissoesSistema } from '@/components/empresa/components/PermissoesSistema';
 
 export function PermissoesTab() {
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [selectedRole, setSelectedRole] = useState<any>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const { data: permissoes, isLoading: loadingPermissoes } = useQuery({
-    queryKey: ['permissoes'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('permissoes')
-        .select('*')
-        .order('modulo')
-        .order('nome');
-      
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const { data: rolesCustomizados, isLoading: loadingRoles } = useQuery({
-    queryKey: ['roles-customizados'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('roles_customizados')
-        .select(`
-          *,
-          roles_permissoes (
-            permissao_id,
-            permissoes (
-              nome,
-              descricao,
-              modulo
-            )
-          )
-        `)
-        .order('nome');
-      
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const deleteRoleMutation = useMutation({
-    mutationFn: async (roleId: string) => {
-      const { error } = await supabase
-        .from('roles_customizados')
-        .delete()
-        .eq('id', roleId);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['roles-customizados'] });
-      toast({
-        title: 'Sucesso',
-        description: 'Role customizado excluído com sucesso!',
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: 'Erro',
-        description: 'Erro ao excluir role customizado.',
-        variant: 'destructive',
-      });
-      console.error('Erro ao excluir role:', error);
-    },
-  });
-
-  const handleEditRole = (role: any) => {
-    setSelectedRole(role);
-    setIsDialogOpen(true);
-  };
-
-  const handleAddRole = () => {
-    setSelectedRole(null);
-    setIsDialogOpen(true);
-  };
-
-  const handleDeleteRole = (roleId: string) => {
-    if (confirm('Tem certeza que deseja excluir este role customizado?')) {
-      deleteRoleMutation.mutate(roleId);
-    }
-  };
-
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-    setSelectedRole(null);
-  };
-
-  // Agrupar permissões por módulo
-  const permissoesPorModulo = permissoes?.reduce((acc, permissao) => {
-    const modulo = permissao.modulo;
-    if (!acc[modulo]) {
-      acc[modulo] = [];
-    }
-    acc[modulo].push(permissao);
-    return acc;
-  }, {} as Record<string, any[]>) || {};
+  const {
+    permissoes,
+    rolesCustomizados,
+    loadingPermissoes,
+    loadingRoles,
+    selectedRole,
+    isDialogOpen,
+    permissoesPorModulo,
+    handleEditRole,
+    handleAddRole,
+    handleDeleteRole,
+    handleDialogClose,
+  } = usePermissoesTab();
 
   if (loadingPermissoes || loadingRoles) {
     return <div>Carregando permissões...</div>;
@@ -136,7 +51,7 @@ export function PermissoesTab() {
                     Crie e gerencie roles personalizados com permissões específicas.
                   </CardDescription>
                 </div>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
                   <DialogTrigger asChild>
                     <Button onClick={handleAddRole}>
                       <Plus className="h-4 w-4 mr-2" />
@@ -159,74 +74,14 @@ export function PermissoesTab() {
               </div>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Descrição</TableHead>
-                    <TableHead>Permissões</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {rolesCustomizados?.map((role) => (
-                    <TableRow key={role.id}>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: role.cor }}
-                          />
-                          {role.nome}
-                        </div>
-                      </TableCell>
-                      <TableCell>{role.descricao}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">
-                          {role.roles_permissoes?.length || 0} permissões
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={role.ativo ? 'outline' : 'destructive'}>
-                          {role.ativo ? 'Ativo' : 'Inativo'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex gap-1 justify-end">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEditRole(role)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteRole(role.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
-              {(!rolesCustomizados || rolesCustomizados.length === 0) && (
-                <div className="flex flex-col items-center justify-center py-12">
-                  <Shield className="h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Nenhum role customizado</h3>
-                  <p className="text-muted-foreground text-center mb-4">
-                    Crie roles personalizados para atender às necessidades específicas da empresa.
-                  </p>
-                  <Button onClick={handleAddRole}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Criar Primeiro Role
-                  </Button>
-                </div>
+              {rolesCustomizados && rolesCustomizados.length > 0 ? (
+                <RolesCustomizadosTable
+                  rolesCustomizados={rolesCustomizados}
+                  onEdit={handleEditRole}
+                  onDelete={handleDeleteRole}
+                />
+              ) : (
+                <EmptyRolesState onAddRole={handleAddRole} />
               )}
             </CardContent>
           </Card>
@@ -241,32 +96,7 @@ export function PermissoesTab() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                {Object.entries(permissoesPorModulo).map(([modulo, perms]) => (
-                  <div key={modulo}>
-                    <h4 className="text-lg font-semibold mb-3 capitalize">
-                      Módulo: {modulo}
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {perms.map((permissao) => (
-                        <Card key={permissao.id} className="p-3">
-                          <div className="space-y-1">
-                            <div className="flex items-center justify-between">
-                              <h5 className="font-medium text-sm">{permissao.nome}</h5>
-                              <Badge variant="outline" className="text-xs">
-                                {permissao.acao}
-                              </Badge>
-                            </div>
-                            <p className="text-xs text-muted-foreground">
-                              {permissao.descricao}
-                            </p>
-                          </div>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <PermissoesSistema permissoesPorModulo={permissoesPorModulo} />
             </CardContent>
           </Card>
         </TabsContent>
