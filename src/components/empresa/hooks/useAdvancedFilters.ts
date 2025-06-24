@@ -1,16 +1,7 @@
 
 import { useState, useMemo } from 'react';
 import { NotaFiscalCompra, NotaFiscalVenda } from './useEmpresaHistory';
-
-export interface FilterState {
-  searchText: string;
-  startDate?: Date;
-  endDate?: Date;
-  status: string[];
-  minValue?: number;
-  maxValue?: number;
-  cfop?: string;
-}
+import { FilterState } from '../components/filters/ActiveFiltersDisplay';
 
 const initialFilters: FilterState = {
   searchText: '',
@@ -88,3 +79,5 @@ export function useAdvancedFilters() {
     filterNotasFiscais
   };
 }
+
+export type { FilterState };
