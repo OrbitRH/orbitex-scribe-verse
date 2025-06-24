@@ -2,15 +2,16 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { Progress } from '@/components/ui/progress';
-import { Card, CardContent } from '@/components/ui/card';
 import { 
   Save,
-  RotateCcw
+  RotateCcw,
+  Sparkles
 } from 'lucide-react';
 import { useProductForm } from './hooks/useProductForm';
 import ProductFormSidebar from './ProductFormSidebar';
 import ProductFormContent from './ProductFormContent';
+import { GlassmorphicCard } from './components/GlassmorphicCard';
+import { ProgressIndicator } from './components/ProgressIndicator';
 
 interface ProductFormProps {
   product?: any;
@@ -63,25 +64,13 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
   return (
     <div className="space-y-6">
       {/* Progress Header */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold">
-              {product ? 'Editando Produto' : 'Novo Produto'}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Complete as informações para cadastrar o produto no sistema
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-sm font-medium">{calculateProgress()}% completo</div>
-            <div className="text-xs text-muted-foreground">
-              {completedSections.length} de {sections.length} seções
-            </div>
-          </div>
-        </div>
-        <Progress value={calculateProgress()} className="h-2" />
-      </div>
+      <GlassmorphicCard variant="elevated" className="p-6">
+        <ProgressIndicator
+          progress={calculateProgress()}
+          completedSections={completedSections.length}
+          totalSections={sections.length}
+        />
+      </GlassmorphicCard>
 
       <Form {...form}>
         <form onSubmit={onSubmit} className="space-y-6">
@@ -107,32 +96,45 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
           </div>
 
           {/* Action Bar */}
-          <Card>
-            <CardContent className="py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => form.reset()}
-                    disabled={loading}
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Resetar
-                  </Button>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-muted-foreground">
-                    {isFormValid() ? 'Pronto para salvar' : 'Complete as seções obrigatórias'}
-                  </span>
-                  <Button type="submit" disabled={loading || !isFormValid()}>
-                    <Save className="h-4 w-4 mr-2" />
-                    {loading ? 'Salvando...' : 'Salvar Produto'}
-                  </Button>
-                </div>
+          <GlassmorphicCard variant="elevated" className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => form.reset()}
+                  disabled={loading}
+                  className="bg-white/80 border-slate-200/60 hover:bg-white/90"
+                >
+                  <RotateCcw className="h-4 w-4 mr-2" />
+                  Resetar Formulário
+                </Button>
               </div>
-            </CardContent>
-          </Card>
+              
+              <div className="flex items-center space-x-4">
+                <div className="text-right">
+                  <div className={`text-sm font-medium ${
+                    isFormValid() ? 'text-green-600' : 'text-slate-600'
+                  }`}>
+                    {isFormValid() ? 'Pronto para salvar' : 'Complete as seções obrigatórias'}
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    {calculateProgress()}% do cadastro concluído
+                  </div>
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  disabled={loading || !isFormValid()}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg shadow-blue-500/25"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {loading ? 'Salvando...' : 'Salvar Produto'}
+                  <Sparkles className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            </div>
+          </GlassmorphicCard>
         </form>
       </Form>
     </div>

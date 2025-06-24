@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   Info, 
@@ -11,6 +10,8 @@ import {
   CheckCircle2,
   Circle
 } from 'lucide-react';
+import { GlassmorphicCard } from './components/GlassmorphicCard';
+import { StatusBadge } from './components/StatusBadge';
 
 const sections = [
   {
@@ -76,64 +77,79 @@ export default function ProductFormSidebar({
   };
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">Seções</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <nav className="space-y-1">
-          {sections.map((section) => {
-            const IconComponent = section.icon;
-            const StatusIcon = getSectionIcon(section.id);
-            const status = getSectionStatus(section.id);
-            const isActive = activeSection === section.id;
+    <GlassmorphicCard variant="elevated" className="p-0">
+      <div className="p-6 border-b border-slate-200/60">
+        <h3 className="text-lg font-semibold text-slate-800 mb-1">Seções do Formulário</h3>
+        <p className="text-sm text-slate-600">Navegue pelas diferentes etapas do cadastro</p>
+      </div>
+      
+      <nav className="p-4 space-y-2">
+        {sections.map((section) => {
+          const IconComponent = section.icon;
+          const StatusIcon = getSectionIcon(section.id);
+          const status = getSectionStatus(section.id);
+          const isActive = activeSection === section.id;
+          const isCompleted = completedSections.includes(section.id);
 
-            return (
-              <button
-                key={section.id}
-                type="button"
-                onClick={() => onSectionChange(section.id)}
-                className={`w-full text-left p-3 rounded-lg transition-colors ${
-                  isActive
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted'
-                }`}
-              >
-                <div className="flex items-start space-x-3">
-                  <IconComponent className={`h-5 w-5 mt-0.5 ${isActive ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className={`text-sm font-medium ${isActive ? 'text-primary-foreground' : ''}`}>
-                        {section.title}
-                      </span>
-                      <StatusIcon className={`h-4 w-4 ${
-                        status === 'completed' 
-                          ? 'text-green-500' 
-                          : isActive 
-                            ? 'text-primary-foreground' 
-                            : 'text-muted-foreground'
-                      }`} />
-                    </div>
-                    <p className={`text-xs ${
-                      isActive ? 'text-primary-foreground/80' : 'text-muted-foreground'
+          return (
+            <button
+              key={section.id}
+              type="button"
+              onClick={() => onSectionChange(section.id)}
+              className={`w-full text-left p-4 rounded-xl transition-all duration-200 group ${
+                isActive
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25'
+                  : 'bg-white/60 hover:bg-white/80 border border-slate-200/60 hover:border-slate-300/60 hover:shadow-md'
+              }`}
+            >
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0">
+                  <IconComponent className={`h-5 w-5 mt-0.5 transition-colors ${
+                    isActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-700'
+                  }`} />
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`text-sm font-medium ${
+                      isActive ? 'text-white' : 'text-slate-800'
                     }`}>
-                      {section.description}
-                    </p>
-                    {section.required && (
-                      <Badge 
-                        variant={isActive ? "secondary" : "outline"} 
-                        className="mt-1 text-xs"
-                      >
-                        Obrigatório
-                      </Badge>
+                      {section.title}
+                    </span>
+                    <StatusIcon className={`h-4 w-4 ${
+                      isCompleted 
+                        ? 'text-green-500' 
+                        : isActive 
+                          ? 'text-white/80' 
+                          : 'text-slate-400'
+                    }`} />
+                  </div>
+                  
+                  <p className={`text-xs mb-3 ${
+                    isActive ? 'text-white/80' : 'text-slate-600'
+                  }`}>
+                    {section.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <StatusBadge 
+                      status={status}
+                      className={isActive ? 'bg-white/20 text-white border-white/30' : ''}
+                    />
+                    
+                    {isCompleted && (
+                      <div className="flex items-center gap-1 text-xs text-green-600">
+                        <CheckCircle2 className="h-3 w-3" />
+                        <span className={isActive ? 'text-white' : ''}>Concluído</span>
+                      </div>
                     )}
                   </div>
                 </div>
-              </button>
-            );
-          })}
-        </nav>
-      </CardContent>
-    </Card>
+              </div>
+            </button>
+          );
+        })}
+      </nav>
+    </GlassmorphicCard>
   );
 }
