@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
-import { useMediaQuery } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import ProductForm from './ProductForm';
 
 interface ProductFormModalProps {
@@ -30,7 +30,7 @@ export default function ProductFormModal({
   product, 
   onSuccess 
 }: ProductFormModalProps) {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useIsMobile();
 
   const handleSuccess = () => {
     onSuccess();
