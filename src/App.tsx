@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { Layout } from "@/components/layout/Layout";
+import { Outlet } from "react-router-dom";
 
 // Pages
 import Dashboard from "@/pages/Dashboard";
@@ -38,7 +39,7 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <AuthGuard><Layout /></AuthGuard>,
+    element: <AuthGuard><Layout><Outlet /></Layout></AuthGuard>,
     children: [
       { index: true, element: <Dashboard /> },
       { path: "cadastros", element: <Cadastros /> },

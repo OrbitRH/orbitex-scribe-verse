@@ -8,22 +8,9 @@ import { Plus, Search, Edit, Trash2, Shield } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ConvenioFormModal } from './ConvenioFormModal';
 import { toast } from 'sonner';
+import type { Database } from '@/integrations/supabase/types';
 
-interface Convenio {
-  id: string;
-  nome: string;
-  codigo?: string;
-  tipo: string;
-  empresa_convenio?: string;
-  descricao?: string;
-  ans_registro?: string;
-  permite_dependentes?: boolean;
-  contato?: string;
-  telefone?: string;
-  email?: string;
-  site?: string;
-  ativo: boolean;
-}
+type Convenio = Database['public']['Tables']['convenios']['Row'];
 
 export function ConveniosGestao() {
   const [convenios, setConvenios] = useState<Convenio[]>([]);

@@ -8,21 +8,9 @@ import { Plus, Search, Edit, Trash2, Gift } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { BeneficioFormModal } from './BeneficioFormModal';
 import { toast } from 'sonner';
+import type { Database } from '@/integrations/supabase/types';
 
-interface TipoBeneficio {
-  id: string;
-  nome: string;
-  codigo?: string;
-  categoria: string;
-  descricao?: string;
-  valor_empresa?: number;
-  valor_desconto?: number;
-  tipo_desconto?: string;
-  periodicidade?: string;
-  permite_dependentes?: boolean;
-  obrigatorio?: boolean;
-  ativo: boolean;
-}
+type TipoBeneficio = Database['public']['Tables']['tipos_beneficios']['Row'];
 
 export function BeneficiosGestao() {
   const [beneficios, setBeneficios] = useState<TipoBeneficio[]>([]);
