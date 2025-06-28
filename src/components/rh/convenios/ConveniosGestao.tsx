@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,9 +7,7 @@ import { Plus, Search, Edit, Trash2, Shield } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ConvenioFormModal } from './ConvenioFormModal';
 import { toast } from 'sonner';
-import type { Database } from '@/integrations/supabase/types';
-
-type Convenio = Database['public']['Tables']['convenios']['Row'];
+import { Convenio } from './types/ConvenioTypes';
 
 export function ConveniosGestao() {
   const [convenios, setConvenios] = useState<Convenio[]>([]);
