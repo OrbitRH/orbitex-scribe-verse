@@ -11,15 +11,18 @@ import { useForm } from 'react-hook-form';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+type CategoriaType = 'saude' | 'alimentacao' | 'transporte' | 'educacao' | 'outros';
+type TipoDescontoType = 'valor_fixo' | 'percentual' | 'sem_desconto';
+
 interface TipoBeneficio {
   id: string;
   nome: string;
   codigo?: string;
-  categoria: string;
+  categoria: CategoriaType;
   descricao?: string;
   valor_empresa?: number;
   valor_desconto?: number;
-  tipo_desconto?: string;
+  tipo_desconto?: TipoDescontoType;
   periodicidade?: string;
   permite_dependentes?: boolean;
   obrigatorio?: boolean;
@@ -36,11 +39,11 @@ interface BeneficioFormModalProps {
 interface FormData {
   nome: string;
   codigo: string;
-  categoria: string;
+  categoria: CategoriaType;
   descricao: string;
   valor_empresa: string;
   valor_desconto: string;
-  tipo_desconto: string;
+  tipo_desconto: TipoDescontoType;
   periodicidade: string;
   permite_dependentes: boolean;
   obrigatorio: boolean;
@@ -52,7 +55,7 @@ export function BeneficioFormModal({ isOpen, onClose, beneficio, onSuccess }: Be
     defaultValues: {
       nome: beneficio?.nome || '',
       codigo: beneficio?.codigo || '',
-      categoria: beneficio?.categoria || '',
+      categoria: beneficio?.categoria || 'saude',
       descricao: beneficio?.descricao || '',
       valor_empresa: beneficio?.valor_empresa?.toString() || '',
       valor_desconto: beneficio?.valor_desconto?.toString() || '',
@@ -69,7 +72,7 @@ export function BeneficioFormModal({ isOpen, onClose, beneficio, onSuccess }: Be
       reset({
         nome: beneficio?.nome || '',
         codigo: beneficio?.codigo || '',
-        categoria: beneficio?.categoria || '',
+        categoria: beneficio?.categoria || 'saude',
         descricao: beneficio?.descricao || '',
         valor_empresa: beneficio?.valor_empresa?.toString() || '',
         valor_desconto: beneficio?.valor_desconto?.toString() || '',
@@ -109,7 +112,7 @@ export function BeneficioFormModal({ isOpen, onClose, beneficio, onSuccess }: Be
       } else {
         const { error } = await supabase
           .from('tipos_beneficios')
-          .insert([beneficioData]);
+          .insert(beneficioData);
 
         if (error) throw error;
         toast.success('Benefício criado com sucesso');
@@ -157,7 +160,7 @@ export function BeneficioFormModal({ isOpen, onClose, beneficio, onSuccess }: Be
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="categoria">Categoria *</Label>
-              <Select value={watch('categoria')} onValueChange={(value) => setValue('categoria', value)}>
+              <Select value={watch('categoria')} onValueChange={(value: CategoriaType) => setValue('categoria', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione a categoria" />
                 </SelectTrigger>
@@ -218,7 +221,7 @@ export function BeneficioFormModal({ isOpen, onClose, beneficio, onSuccess }: Be
             </div>
             <div>
               <Label htmlFor="tipo_desconto">Tipo de Desconto</Label>
-              <Select value={watch('tipo_desconto')} onValueChange={(value) => setValue('tipo_desconto', value)}>
+              <Select value={watch('tipo_desconto')} onValueChange={(value: TipoDescontoType) => setValue('tipo_desconto', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

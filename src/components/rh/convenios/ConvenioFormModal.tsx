@@ -11,11 +11,13 @@ import { useForm } from 'react-hook-form';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+type TipoConvenioType = 'medico' | 'odontologico' | 'farmacia' | 'educacao' | 'outros';
+
 interface Convenio {
   id: string;
   nome: string;
   codigo?: string;
-  tipo: string;
+  tipo: TipoConvenioType;
   empresa_convenio?: string;
   descricao?: string;
   ans_registro?: string;
@@ -37,7 +39,7 @@ interface ConvenioFormModalProps {
 interface FormData {
   nome: string;
   codigo: string;
-  tipo: string;
+  tipo: TipoConvenioType;
   empresa_convenio: string;
   descricao: string;
   ans_registro: string;
@@ -54,7 +56,7 @@ export function ConvenioFormModal({ isOpen, onClose, convenio, onSuccess }: Conv
     defaultValues: {
       nome: convenio?.nome || '',
       codigo: convenio?.codigo || '',
-      tipo: convenio?.tipo || '',
+      tipo: convenio?.tipo || 'medico',
       empresa_convenio: convenio?.empresa_convenio || '',
       descricao: convenio?.descricao || '',
       ans_registro: convenio?.ans_registro || '',
@@ -72,7 +74,7 @@ export function ConvenioFormModal({ isOpen, onClose, convenio, onSuccess }: Conv
       reset({
         nome: convenio?.nome || '',
         codigo: convenio?.codigo || '',
-        tipo: convenio?.tipo || '',
+        tipo: convenio?.tipo || 'medico',
         empresa_convenio: convenio?.empresa_convenio || '',
         descricao: convenio?.descricao || '',
         ans_registro: convenio?.ans_registro || '',
@@ -114,7 +116,7 @@ export function ConvenioFormModal({ isOpen, onClose, convenio, onSuccess }: Conv
       } else {
         const { error } = await supabase
           .from('convenios')
-          .insert([convenioData]);
+          .insert(convenioData);
 
         if (error) throw error;
         toast.success('Convênio criado com sucesso');
@@ -162,7 +164,7 @@ export function ConvenioFormModal({ isOpen, onClose, convenio, onSuccess }: Conv
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="tipo">Tipo *</Label>
-              <Select value={watch('tipo')} onValueChange={(value) => setValue('tipo', value)}>
+              <Select value={watch('tipo')} onValueChange={(value: TipoConvenioType) => setValue('tipo', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o tipo" />
                 </SelectTrigger>
