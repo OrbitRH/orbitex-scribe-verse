@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Calendar, FileText, Award } from 'lucide-react';
+import { Users, Calendar, FileText, Award, Gift, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -14,25 +14,39 @@ export default function RH() {
       color: 'text-blue-600',
     },
     {
+      title: 'Benefícios',
+      description: 'Gestão de benefícios',
+      icon: Gift,
+      href: '/rh/beneficios',
+      color: 'text-green-600',
+    },
+    {
+      title: 'Convênios',
+      description: 'Planos e convênios',
+      icon: Shield,
+      href: '/rh/convenios',
+      color: 'text-purple-600',
+    },
+    {
       title: 'Ponto',
       description: 'Controle de ponto',
       icon: Calendar,
       href: '/rh/ponto',
-      color: 'text-green-600',
+      color: 'text-orange-600',
     },
     {
       title: 'Documentos',
       description: 'Documentação RH',
       icon: FileText,
       href: '/rh/documentos',
-      color: 'text-purple-600',
+      color: 'text-red-600',
     },
     {
       title: 'Avaliações',
       description: 'Performance',
       icon: Award,
       href: '/rh/avaliacoes',
-      color: 'text-orange-600',
+      color: 'text-yellow-600',
     },
   ];
 
@@ -45,7 +59,7 @@ export default function RH() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {modules.map((module) => {
           const Icon = module.icon;
           return (
@@ -87,6 +101,7 @@ export default function RH() {
               <h4 className="font-medium mb-2">Principais Funcionalidades:</h4>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• Cadastro completo de colaboradores</li>
+                <li>• Gestão de benefícios e convênios</li>
                 <li>• Controle de ponto eletrônico</li>
                 <li>• Gestão de documentos pessoais</li>
                 <li>• Sistema de avaliação de desempenho</li>

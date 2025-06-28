@@ -9,6 +9,63 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      beneficios_empresas: {
+        Row: {
+          ativo: boolean | null
+          created_at: string | null
+          data_fim: string | null
+          data_inicio: string | null
+          empresa_beneficio_id: string | null
+          id: string
+          percentual_colaborador: number | null
+          percentual_empresa: number | null
+          tipo_beneficio_id: string | null
+          updated_at: string | null
+          valor_contratado: number | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          created_at?: string | null
+          data_fim?: string | null
+          data_inicio?: string | null
+          empresa_beneficio_id?: string | null
+          id?: string
+          percentual_colaborador?: number | null
+          percentual_empresa?: number | null
+          tipo_beneficio_id?: string | null
+          updated_at?: string | null
+          valor_contratado?: number | null
+        }
+        Update: {
+          ativo?: boolean | null
+          created_at?: string | null
+          data_fim?: string | null
+          data_inicio?: string | null
+          empresa_beneficio_id?: string | null
+          id?: string
+          percentual_colaborador?: number | null
+          percentual_empresa?: number | null
+          tipo_beneficio_id?: string | null
+          updated_at?: string | null
+          valor_contratado?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beneficios_empresas_empresa_beneficio_id_fkey"
+            columns: ["empresa_beneficio_id"]
+            isOneToOne: false
+            referencedRelation: "empresas_beneficios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "beneficios_empresas_tipo_beneficio_id_fkey"
+            columns: ["tipo_beneficio_id"]
+            isOneToOne: false
+            referencedRelation: "tipos_beneficios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cargos: {
         Row: {
           ativo: boolean | null
@@ -356,9 +413,58 @@ export type Database = {
           },
         ]
       }
-      convenios: {
+      colaboradores_dependentes: {
         Row: {
           ativo: boolean | null
+          colaborador_id: string | null
+          cpf: string | null
+          created_at: string | null
+          data_nascimento: string | null
+          id: string
+          nome: string
+          parentesco: string
+          sexo: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          colaborador_id?: string | null
+          cpf?: string | null
+          created_at?: string | null
+          data_nascimento?: string | null
+          id?: string
+          nome: string
+          parentesco: string
+          sexo?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          colaborador_id?: string | null
+          cpf?: string | null
+          created_at?: string | null
+          data_nascimento?: string | null
+          id?: string
+          nome?: string
+          parentesco?: string
+          sexo?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "colaboradores_dependentes_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      convenios: {
+        Row: {
+          ans_registro: string | null
+          ativo: boolean | null
+          codigo: string | null
           contato: string | null
           created_at: string | null
           descricao: string | null
@@ -366,6 +472,7 @@ export type Database = {
           empresa_convenio: string | null
           id: string
           nome: string
+          permite_dependentes: boolean | null
           site: string | null
           telefone: string | null
           termos_uso: string | null
@@ -373,7 +480,9 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          ans_registro?: string | null
           ativo?: boolean | null
+          codigo?: string | null
           contato?: string | null
           created_at?: string | null
           descricao?: string | null
@@ -381,6 +490,7 @@ export type Database = {
           empresa_convenio?: string | null
           id?: string
           nome: string
+          permite_dependentes?: boolean | null
           site?: string | null
           telefone?: string | null
           termos_uso?: string | null
@@ -388,7 +498,9 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          ans_registro?: string | null
           ativo?: boolean | null
+          codigo?: string | null
           contato?: string | null
           created_at?: string | null
           descricao?: string | null
@@ -396,6 +508,7 @@ export type Database = {
           empresa_convenio?: string | null
           id?: string
           nome?: string
+          permite_dependentes?: boolean | null
           site?: string | null
           telefone?: string | null
           termos_uso?: string | null
@@ -533,6 +646,51 @@ export type Database = {
           telefone?: string | null
           tipo_empresa?: Database["public"]["Enums"]["tipo_empresa"]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      empresas_beneficios: {
+        Row: {
+          ativo: boolean | null
+          cnpj: string | null
+          contato_responsavel: string | null
+          created_at: string | null
+          email: string | null
+          endereco: string | null
+          id: string
+          nome: string
+          observacoes: string | null
+          razao_social: string | null
+          telefone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          cnpj?: string | null
+          contato_responsavel?: string | null
+          created_at?: string | null
+          email?: string | null
+          endereco?: string | null
+          id?: string
+          nome: string
+          observacoes?: string | null
+          razao_social?: string | null
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          cnpj?: string | null
+          contato_responsavel?: string | null
+          created_at?: string | null
+          email?: string | null
+          endereco?: string | null
+          id?: string
+          nome?: string
+          observacoes?: string | null
+          razao_social?: string | null
+          telefone?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -863,6 +1021,59 @@ export type Database = {
           nome?: string
         }
         Relationships: []
+      }
+      planos_convenios: {
+        Row: {
+          abrangencia: string | null
+          ativo: boolean | null
+          carencia_dias: number | null
+          cobertura: string | null
+          codigo: string | null
+          convenio_id: string | null
+          created_at: string | null
+          id: string
+          nome: string
+          updated_at: string | null
+          valor_coparticipacao: number | null
+          valor_mensal: number | null
+        }
+        Insert: {
+          abrangencia?: string | null
+          ativo?: boolean | null
+          carencia_dias?: number | null
+          cobertura?: string | null
+          codigo?: string | null
+          convenio_id?: string | null
+          created_at?: string | null
+          id?: string
+          nome: string
+          updated_at?: string | null
+          valor_coparticipacao?: number | null
+          valor_mensal?: number | null
+        }
+        Update: {
+          abrangencia?: string | null
+          ativo?: boolean | null
+          carencia_dias?: number | null
+          cobertura?: string | null
+          codigo?: string | null
+          convenio_id?: string | null
+          created_at?: string | null
+          id?: string
+          nome?: string
+          updated_at?: string | null
+          valor_coparticipacao?: number | null
+          valor_mensal?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planos_convenios_convenio_id_fkey"
+            columns: ["convenio_id"]
+            isOneToOne: false
+            referencedRelation: "convenios"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       produtos: {
         Row: {
@@ -1239,11 +1450,14 @@ export type Database = {
         Row: {
           ativo: boolean | null
           categoria: Database["public"]["Enums"]["categoria_beneficio"]
+          codigo: string | null
           created_at: string | null
           descricao: string | null
           id: string
           nome: string
           obrigatorio: boolean | null
+          periodicidade: string | null
+          permite_dependentes: boolean | null
           tipo_desconto: Database["public"]["Enums"]["tipo_desconto"]
           updated_at: string | null
           valor_desconto: number | null
@@ -1252,11 +1466,14 @@ export type Database = {
         Insert: {
           ativo?: boolean | null
           categoria: Database["public"]["Enums"]["categoria_beneficio"]
+          codigo?: string | null
           created_at?: string | null
           descricao?: string | null
           id?: string
           nome: string
           obrigatorio?: boolean | null
+          periodicidade?: string | null
+          permite_dependentes?: boolean | null
           tipo_desconto: Database["public"]["Enums"]["tipo_desconto"]
           updated_at?: string | null
           valor_desconto?: number | null
@@ -1265,11 +1482,14 @@ export type Database = {
         Update: {
           ativo?: boolean | null
           categoria?: Database["public"]["Enums"]["categoria_beneficio"]
+          codigo?: string | null
           created_at?: string | null
           descricao?: string | null
           id?: string
           nome?: string
           obrigatorio?: boolean | null
+          periodicidade?: string | null
+          permite_dependentes?: boolean | null
           tipo_desconto?: Database["public"]["Enums"]["tipo_desconto"]
           updated_at?: string | null
           valor_desconto?: number | null

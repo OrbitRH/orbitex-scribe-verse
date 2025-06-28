@@ -1,236 +1,88 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/hooks/useAuth";
+import { Toaster } from "@/components/ui/sonner";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { Layout } from "@/components/layout/Layout";
-import Dashboard from "./pages/Dashboard";
-import Auth from "./pages/Auth";
-import NotFound from "./pages/NotFound";
+import Layout from "@/components/layout/Layout";
 
-// Import all pages
-import Cadastros from "./pages/Cadastros";
-import Produtos from "./pages/cadastros/Produtos";
-import Empresas from "./pages/cadastros/Empresas";
-import CentrosCusto from "./pages/cadastros/CentrosCusto";
-import Setores from "./pages/cadastros/Setores";
-import Funcoes from "./pages/cadastros/Funcoes";
-import Organograma from "./pages/cadastros/Organograma";
-import Estoque from "./pages/Estoque";
-import PCP from "./pages/PCP";
-import Tarefas from "./pages/Tarefas";
-import RH from "./pages/RH";
-import Colaboradores from "./pages/rh/Colaboradores";
-import Ponto from "./pages/rh/Ponto";
-import Documentos from "./pages/rh/Documentos";
-import Avaliacoes from "./pages/rh/Avaliacoes";
-import Financeiro from "./pages/Financeiro";
-import Comercial from "./pages/Comercial";
-import Relatorios from "./pages/Relatorios";
-import Fiscal from "./pages/Fiscal";
-import Configuracoes from "./pages/Configuracoes";
-import Empresa from "./pages/configuracoes/Empresa";
+// Pages
+import Dashboard from "@/pages/Dashboard";
+import Cadastros from "@/pages/Cadastros";
+import Produtos from "@/pages/cadastros/Produtos";
+import Empresas from "@/pages/cadastros/Empresas";
+import CentrosCusto from "@/pages/cadastros/CentrosCusto";
+import Funcoes from "@/pages/cadastros/Funcoes";
+import Setores from "@/pages/cadastros/Setores";
+import Organograma from "@/pages/cadastros/Organograma";
+import RH from "@/pages/RH";
+import Colaboradores from "@/pages/rh/Colaboradores";
+import Beneficios from "@/pages/rh/Beneficios";
+import Convenios from "@/pages/rh/Convenios";
+import Ponto from "@/pages/rh/Ponto";
+import Documentos from "@/pages/rh/Documentos";
+import Avaliacoes from "@/pages/rh/Avaliacoes";
+import Comercial from "@/pages/Comercial";
+import Estoque from "@/pages/Estoque";
+import PCP from "@/pages/PCP";
+import Financeiro from "@/pages/Financeiro";
+import Fiscal from "@/pages/Fiscal";
+import Relatorios from "@/pages/Relatorios";
+import Tarefas from "@/pages/Tarefas";
+import Configuracoes from "@/pages/Configuracoes";
+import EmpresaConfig from "@/pages/configuracoes/Empresa";
+import Auth from "@/pages/Auth";
+import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/auth" element={<Auth />} />
-            
-            {/* Dashboard */}
-            <Route path="/" element={
-              <AuthGuard requireRoles={['admin', 'gestor', 'colaborador', 'rh', 'financeiro']}>
-                <Layout>
-                  <Dashboard />
-                </Layout>
-              </AuthGuard>
-            } />
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <AuthGuard><Layout /></AuthGuard>,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: "cadastros", element: <Cadastros /> },
+      { path: "cadastros/produtos", element: <Produtos /> },
+      { path: "cadastros/empresas", element: <Empresas /> },
+      { path: "cadastros/centros-custo", element: <CentrosCusto /> },
+      { path: "cadastros/funcoes", element: <Funcoes /> },
+      { path: "cadastros/setores", element: <Setores /> },
+      { path: "cadastros/organograma", element: <Organograma /> },
+      { path: "rh", element: <RH /> },
+      { path: "rh/colaboradores", element: <Colaboradores /> },
+      { path: "rh/beneficios", element: <Beneficios /> },
+      { path: "rh/convenios", element: <Convenios /> },
+      { path: "rh/ponto", element: <Ponto /> },
+      { path: "rh/documentos", element: <Documentos /> },
+      { path: "rh/avaliacoes", element: <Avaliacoes /> },
+      { path: "comercial", element: <Comercial /> },
+      { path: "estoque", element: <Estoque /> },
+      { path: "pcp", element: <PCP /> },
+      { path: "financeiro", element: <Financeiro /> },
+      { path: "fiscal", element: <Fiscal /> },
+      { path: "relatorios", element: <Relatorios /> },
+      { path: "tarefas", element: <Tarefas /> },
+      { path: "configuracoes", element: <Configuracoes /> },
+      { path: "configuracoes/empresa", element: <EmpresaConfig /> },
+    ],
+  },
+  {
+    path: "/auth",
+    element: <Auth />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);
 
-            {/* Cadastros */}
-            <Route path="/cadastros" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Cadastros />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/cadastros/produtos" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Produtos />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/cadastros/empresas" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Empresas />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/cadastros/centros-custo" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <CentrosCusto />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/cadastros/setores" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Setores />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/cadastros/funcoes" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Funcoes />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/cadastros/organograma" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Organograma />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* Estoque */}
-            <Route path="/estoque" element={
-              <AuthGuard requireRoles={['admin', 'gestor', 'colaborador']}>
-                <Layout>
-                  <Estoque />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* PCP */}
-            <Route path="/pcp" element={
-              <AuthGuard requireRoles={['admin', 'gestor', 'colaborador']}>
-                <Layout>
-                  <PCP />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* Tarefas */}
-            <Route path="/tarefas" element={
-              <AuthGuard requireRoles={['admin', 'gestor', 'colaborador']}>
-                <Layout>
-                  <Tarefas />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* RH */}
-            <Route path="/rh" element={
-              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
-                <Layout>
-                  <RH />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/rh/colaboradores" element={
-              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
-                <Layout>
-                  <Colaboradores />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/rh/ponto" element={
-              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
-                <Layout>
-                  <Ponto />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/rh/documentos" element={
-              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
-                <Layout>
-                  <Documentos />
-                </Layout>
-              </AuthGuard>
-            } />
-            <Route path="/rh/avaliacoes" element={
-              <AuthGuard requireRoles={['admin', 'rh', 'gestor']}>
-                <Layout>
-                  <Avaliacoes />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* Financeiro */}
-            <Route path="/financeiro" element={
-              <AuthGuard requireRoles={['admin', 'financeiro', 'gestor']}>
-                <Layout>
-                  <Financeiro />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* Comercial */}
-            <Route path="/comercial" element={
-              <AuthGuard requireRoles={['admin', 'gestor']}>
-                <Layout>
-                  <Comercial />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* Relatórios */}
-            <Route path="/relatorios" element={
-              <AuthGuard requireRoles={['admin', 'gestor', 'financeiro']}>
-                <Layout>
-                  <Relatorios />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* Fiscal */}
-            <Route path="/fiscal" element={
-              <AuthGuard requireRoles={['admin', 'financeiro']}>
-                <Layout>
-                  <Fiscal />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* Configurações */}
-            <Route path="/configuracoes" element={
-              <AuthGuard requireRoles={['admin']}>
-                <Layout>
-                  <Configuracoes />
-                </Layout>
-              </AuthGuard>
-            } />
-            
-            {/* Nova rota para Empresa */}
-            <Route path="/configuracoes/empresa" element={
-              <AuthGuard requireRoles={['admin']}>
-                <Layout>
-                  <Empresa />
-                </Layout>
-              </AuthGuard>
-            } />
-
-            {/* Catch-all route for 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <Toaster />
+    </QueryClientProvider>
+  );
+}
 
 export default App;
