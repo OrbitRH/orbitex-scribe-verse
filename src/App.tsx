@@ -24,6 +24,11 @@ import Ponto from "@/pages/rh/Ponto";
 import Documentos from "@/pages/rh/Documentos";
 import Avaliacoes from "@/pages/rh/Avaliacoes";
 import Comercial from "@/pages/Comercial";
+import Compras from "@/pages/Compras";
+import PedidosCompra from "@/pages/compras/PedidosCompra";
+import Cotacoes from "@/pages/compras/Cotacoes";
+import Recebimentos from "@/pages/compras/Recebimentos";
+import Fornecedores from "@/pages/compras/Fornecedores";
 import Estoque from "@/pages/Estoque";
 import PCP from "@/pages/PCP";
 import Financeiro from "@/pages/Financeiro";
@@ -58,6 +63,11 @@ const router = createBrowserRouter([
       { path: "rh/documentos", element: <Documentos /> },
       { path: "rh/avaliacoes", element: <Avaliacoes /> },
       { path: "comercial", element: <Comercial /> },
+      { path: "compras", element: <Compras /> },
+      { path: "compras/pedidos", element: <PedidosCompra /> },
+      { path: "compras/cotacoes", element: <Cotacoes /> },
+      { path: "compras/recebimentos", element: <Recebimentos /> },
+      { path: "compras/fornecedores", element: <Fornecedores /> },
       { path: "estoque", element: <Estoque /> },
       { path: "pcp", element: <PCP /> },
       { path: "financeiro", element: <Financeiro /> },
