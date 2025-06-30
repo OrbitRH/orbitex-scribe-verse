@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -88,6 +89,18 @@ const menuItems = [
     icon: ShoppingCart,
     href: '/comercial',
     roles: ['admin', 'gestor'] as AppRole[],
+  },
+  {
+    title: 'Compras',
+    icon: ShoppingCart,
+    href: '/compras',
+    roles: ['admin', 'gestor', 'compras'] as AppRole[],
+    submenu: [
+      { title: 'Pedidos de Compra', href: '/compras/pedidos' },
+      { title: 'Cotações', href: '/compras/cotacoes' },
+      { title: 'Recebimentos', href: '/compras/recebimentos' },
+      { title: 'Fornecedores', href: '/compras/fornecedores' },
+    ],
   },
   {
     title: 'Relatórios',
