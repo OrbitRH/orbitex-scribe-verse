@@ -249,10 +249,7 @@ export default function Cotacoes() {
                           <div key={index} className="flex items-center justify-between text-xs bg-gray-50 p-2 rounded">
                             <span>{fornecedor.empresa_fornecedor?.razao_social}</span>
                             <div className="flex items-center gap-2">
-                              <Badge 
-                                size="sm" 
-                                className={getStatusColor(fornecedor.status)}
-                              >
+                              <Badge className={getStatusColor(fornecedor.status)}>
                                 {fornecedor.status}
                               </Badge>
                               {fornecedor.valor_total && (

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,7 +31,7 @@ export default function Compras() {
         .from('pedidos_compra')
         .select(`
           *,
-          empresa_fornecedor:empresas(razao_social, nome_fantasia)
+          empresa_fornecedor:empresas(id, razao_social, nome_fantasia, cnpj_cpf)
         `)
         .order('created_at', { ascending: false })
         .limit(5);

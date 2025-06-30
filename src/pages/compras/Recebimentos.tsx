@@ -17,7 +17,36 @@ import {
   CheckCircle,
   AlertTriangle
 } from 'lucide-react';
-import { Recebimento } from '@/types/compras';
+
+// Interface para o tipo de dados retornado pela query
+interface RecebimentoQuery {
+  id: string;
+  numero_nota_fiscal: string | null;
+  data_recebimento: string;
+  valor_nota_fiscal: number | null;
+  observacoes: string | null;
+  created_at: string;
+  pedido_compra: {
+    id: string;
+    numero_pedido: string;
+    empresa_fornecedor: {
+      razao_social: string;
+    } | null;
+  } | null;
+  itens: {
+    id: string;
+    quantidade_recebida: number;
+    quantidade_aprovada: number | null;
+    quantidade_rejeitada: number;
+    pedido_item: {
+      quantidade: number;
+      produto: {
+        codigo_interno: string;
+        nome_comercial: string;
+      } | null;
+    } | null;
+  }[];
+}
 
 export default function Recebimentos() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -53,7 +82,7 @@ export default function Recebimentos() {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as Recebimento[];
+      return data as RecebimentoQuery[];
     }
   });
 
@@ -168,7 +197,7 @@ export default function Recebimentos() {
                               </span>
                               <div className="flex items-center gap-3">
                                 <span>Rec: {item.quantidade_recebida}</span>
-                                {item.quantidade_aprovada !== undefined && (
+                                {item.quantidade_aprovada !== undefined && item.quantidade_aprovada !== null && (
                                   <span className="text-green-600">Apr: {item.quantidade_aprovada}</span>
                                 )}
                                 {item.quantidade_rejeitada > 0 && (
