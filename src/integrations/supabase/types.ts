@@ -7,6 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instanciate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "12.2.3 (519615d)"
+  }
   public: {
     Tables: {
       beneficios_empresas: {
@@ -1771,6 +1776,39 @@ export type Database = {
           },
         ]
       }
+      regras_aprovacao_compras: {
+        Row: {
+          aprovador_id: string | null
+          ativo: boolean | null
+          created_at: string | null
+          departamento: string | null
+          id: string
+          ordem_aprovacao: number | null
+          valor_maximo: number | null
+          valor_minimo: number | null
+        }
+        Insert: {
+          aprovador_id?: string | null
+          ativo?: boolean | null
+          created_at?: string | null
+          departamento?: string | null
+          id?: string
+          ordem_aprovacao?: number | null
+          valor_maximo?: number | null
+          valor_minimo?: number | null
+        }
+        Update: {
+          aprovador_id?: string | null
+          ativo?: boolean | null
+          created_at?: string | null
+          departamento?: string | null
+          id?: string
+          ordem_aprovacao?: number | null
+          valor_maximo?: number | null
+          valor_minimo?: number | null
+        }
+        Relationships: []
+      }
       roles_customizados: {
         Row: {
           ativo: boolean | null
@@ -1830,6 +1868,215 @@ export type Database = {
             columns: ["role_id"]
             isOneToOne: false
             referencedRelation: "roles_customizados"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      solicitacoes_compra: {
+        Row: {
+          aprovado_por: string | null
+          created_at: string | null
+          data_aprovacao: string | null
+          data_necessidade: string | null
+          departamento_solicitante: string
+          id: string
+          justificativa: string
+          numero_solicitacao: string
+          observacoes: string | null
+          prioridade: Database["public"]["Enums"]["prioridade_tarefa"]
+          solicitante_id: string | null
+          status: Database["public"]["Enums"]["status_tarefa"]
+          supervisor_id: string | null
+          updated_at: string | null
+          valor_estimado: number | null
+        }
+        Insert: {
+          aprovado_por?: string | null
+          created_at?: string | null
+          data_aprovacao?: string | null
+          data_necessidade?: string | null
+          departamento_solicitante: string
+          id?: string
+          justificativa: string
+          numero_solicitacao: string
+          observacoes?: string | null
+          prioridade?: Database["public"]["Enums"]["prioridade_tarefa"]
+          solicitante_id?: string | null
+          status?: Database["public"]["Enums"]["status_tarefa"]
+          supervisor_id?: string | null
+          updated_at?: string | null
+          valor_estimado?: number | null
+        }
+        Update: {
+          aprovado_por?: string | null
+          created_at?: string | null
+          data_aprovacao?: string | null
+          data_necessidade?: string | null
+          departamento_solicitante?: string
+          id?: string
+          justificativa?: string
+          numero_solicitacao?: string
+          observacoes?: string | null
+          prioridade?: Database["public"]["Enums"]["prioridade_tarefa"]
+          solicitante_id?: string | null
+          status?: Database["public"]["Enums"]["status_tarefa"]
+          supervisor_id?: string | null
+          updated_at?: string | null
+          valor_estimado?: number | null
+        }
+        Relationships: []
+      }
+      solicitacoes_compra_itens: {
+        Row: {
+          created_at: string | null
+          descricao_item: string
+          especificacoes: string | null
+          id: string
+          produto_id: string | null
+          quantidade: number
+          solicitacao_id: string | null
+          urgente: boolean | null
+          valor_estimado_unitario: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          descricao_item: string
+          especificacoes?: string | null
+          id?: string
+          produto_id?: string | null
+          quantidade: number
+          solicitacao_id?: string | null
+          urgente?: boolean | null
+          valor_estimado_unitario?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          descricao_item?: string
+          especificacoes?: string | null
+          id?: string
+          produto_id?: string | null
+          quantidade?: number
+          solicitacao_id?: string | null
+          urgente?: boolean | null
+          valor_estimado_unitario?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "solicitacoes_compra_itens_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solicitacoes_compra_itens_solicitacao_id_fkey"
+            columns: ["solicitacao_id"]
+            isOneToOne: false
+            referencedRelation: "solicitacoes_compra"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tarefas_compras: {
+        Row: {
+          cotacao_id: string | null
+          created_at: string | null
+          data_conclusao: string | null
+          data_inicio: string | null
+          departamento_origem: string | null
+          descricao: string | null
+          id: string
+          numero_tarefa: string
+          observacoes: string | null
+          pedido_compra_id: string | null
+          prazo_limite: string | null
+          prioridade: Database["public"]["Enums"]["prioridade_tarefa"]
+          recebimento_id: string | null
+          responsavel_id: string | null
+          solicitacao_compra_id: string | null
+          solicitante_id: string | null
+          status: Database["public"]["Enums"]["status_tarefa"]
+          tempo_estimado_horas: number | null
+          tempo_gasto_horas: number | null
+          tipo_tarefa: Database["public"]["Enums"]["tipo_tarefa_compra"]
+          titulo: string
+          updated_at: string | null
+        }
+        Insert: {
+          cotacao_id?: string | null
+          created_at?: string | null
+          data_conclusao?: string | null
+          data_inicio?: string | null
+          departamento_origem?: string | null
+          descricao?: string | null
+          id?: string
+          numero_tarefa: string
+          observacoes?: string | null
+          pedido_compra_id?: string | null
+          prazo_limite?: string | null
+          prioridade?: Database["public"]["Enums"]["prioridade_tarefa"]
+          recebimento_id?: string | null
+          responsavel_id?: string | null
+          solicitacao_compra_id?: string | null
+          solicitante_id?: string | null
+          status?: Database["public"]["Enums"]["status_tarefa"]
+          tempo_estimado_horas?: number | null
+          tempo_gasto_horas?: number | null
+          tipo_tarefa: Database["public"]["Enums"]["tipo_tarefa_compra"]
+          titulo: string
+          updated_at?: string | null
+        }
+        Update: {
+          cotacao_id?: string | null
+          created_at?: string | null
+          data_conclusao?: string | null
+          data_inicio?: string | null
+          departamento_origem?: string | null
+          descricao?: string | null
+          id?: string
+          numero_tarefa?: string
+          observacoes?: string | null
+          pedido_compra_id?: string | null
+          prazo_limite?: string | null
+          prioridade?: Database["public"]["Enums"]["prioridade_tarefa"]
+          recebimento_id?: string | null
+          responsavel_id?: string | null
+          solicitacao_compra_id?: string | null
+          solicitante_id?: string | null
+          status?: Database["public"]["Enums"]["status_tarefa"]
+          tempo_estimado_horas?: number | null
+          tempo_gasto_horas?: number | null
+          tipo_tarefa?: Database["public"]["Enums"]["tipo_tarefa_compra"]
+          titulo?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tarefas_compras_cotacao_id_fkey"
+            columns: ["cotacao_id"]
+            isOneToOne: false
+            referencedRelation: "cotacoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tarefas_compras_pedido_compra_id_fkey"
+            columns: ["pedido_compra_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos_compra"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tarefas_compras_recebimento_id_fkey"
+            columns: ["recebimento_id"]
+            isOneToOne: false
+            referencedRelation: "recebimentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tarefas_compras_solicitacao_compra_id_fkey"
+            columns: ["solicitacao_compra_id"]
+            isOneToOne: false
+            referencedRelation: "solicitacoes_compra"
             referencedColumns: ["id"]
           },
         ]
@@ -1968,6 +2215,57 @@ export type Database = {
           },
         ]
       }
+      workflow_compras_historico: {
+        Row: {
+          dados_adicionais: Json | null
+          data_transicao: string | null
+          etapa_destino:
+            | Database["public"]["Enums"]["tipo_tarefa_compra"]
+            | null
+          etapa_origem: Database["public"]["Enums"]["tipo_tarefa_compra"] | null
+          id: string
+          observacoes: string | null
+          tarefa_id: string | null
+          usuario_id: string | null
+        }
+        Insert: {
+          dados_adicionais?: Json | null
+          data_transicao?: string | null
+          etapa_destino?:
+            | Database["public"]["Enums"]["tipo_tarefa_compra"]
+            | null
+          etapa_origem?:
+            | Database["public"]["Enums"]["tipo_tarefa_compra"]
+            | null
+          id?: string
+          observacoes?: string | null
+          tarefa_id?: string | null
+          usuario_id?: string | null
+        }
+        Update: {
+          dados_adicionais?: Json | null
+          data_transicao?: string | null
+          etapa_destino?:
+            | Database["public"]["Enums"]["tipo_tarefa_compra"]
+            | null
+          etapa_origem?:
+            | Database["public"]["Enums"]["tipo_tarefa_compra"]
+            | null
+          id?: string
+          observacoes?: string | null
+          tarefa_id?: string | null
+          usuario_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_compras_historico_tarefa_id_fkey"
+            columns: ["tarefa_id"]
+            isOneToOne: false
+            referencedRelation: "tarefas_compras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -2000,6 +2298,7 @@ export type Database = {
         | "divorciado"
         | "viuvo"
         | "uniao_estavel"
+      prioridade_tarefa: "baixa" | "media" | "alta" | "urgente"
       sexo: "masculino" | "feminino" | "outros"
       status_aprovacao: "pendente" | "aprovado" | "rejeitado"
       status_colaborador:
@@ -2022,6 +2321,12 @@ export type Database = {
         | "recebido_parcial"
         | "recebido_total"
         | "cancelado"
+      status_tarefa:
+        | "pendente"
+        | "em_andamento"
+        | "aguardando"
+        | "concluida"
+        | "cancelada"
       tipo_centro_custo:
         | "operacional"
         | "administrativo"
@@ -2056,6 +2361,15 @@ export type Database = {
         | "ferias"
         | "licenca"
         | "feriado"
+      tipo_tarefa_compra:
+        | "solicitacao"
+        | "cotacao"
+        | "aprovacao"
+        | "pedido"
+        | "acompanhamento"
+        | "recebimento"
+        | "conferencia_nf"
+        | "financeiro"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2063,21 +2377,25 @@ export type Database = {
   }
 }
 
-type DefaultSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
@@ -2095,14 +2413,16 @@ export type Tables<
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
@@ -2118,14 +2438,16 @@ export type TablesInsert<
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
@@ -2141,14 +2463,16 @@ export type TablesUpdate<
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
@@ -2156,14 +2480,16 @@ export type Enums<
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
@@ -2187,6 +2513,7 @@ export const Constants = {
         "viuvo",
         "uniao_estavel",
       ],
+      prioridade_tarefa: ["baixa", "media", "alta", "urgente"],
       sexo: ["masculino", "feminino", "outros"],
       status_aprovacao: ["pendente", "aprovado", "rejeitado"],
       status_colaborador: ["ativo", "inativo", "ferias", "licenca", "afastado"],
@@ -2205,6 +2532,13 @@ export const Constants = {
         "recebido_parcial",
         "recebido_total",
         "cancelado",
+      ],
+      status_tarefa: [
+        "pendente",
+        "em_andamento",
+        "aguardando",
+        "concluida",
+        "cancelada",
       ],
       tipo_centro_custo: [
         "operacional",
@@ -2244,6 +2578,16 @@ export const Constants = {
         "ferias",
         "licenca",
         "feriado",
+      ],
+      tipo_tarefa_compra: [
+        "solicitacao",
+        "cotacao",
+        "aprovacao",
+        "pedido",
+        "acompanhamento",
+        "recebimento",
+        "conferencia_nf",
+        "financeiro",
       ],
     },
   },

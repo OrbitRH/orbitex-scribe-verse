@@ -1,4 +1,18 @@
 
+export type TipoTarefaCompra = 
+  | 'solicitacao'
+  | 'cotacao' 
+  | 'aprovacao'
+  | 'pedido'
+  | 'acompanhamento'
+  | 'recebimento'
+  | 'conferencia_nf'
+  | 'financeiro';
+
+export type PrioridadeTarefa = 'baixa' | 'media' | 'alta' | 'urgente';
+
+export type StatusTarefa = 'pendente' | 'em_andamento' | 'aguardando' | 'concluida' | 'cancelada';
+
 export type StatusPedidoCompra = 'rascunho' | 'pendente_aprovacao' | 'aprovado' | 'enviado' | 'recebido_parcial' | 'recebido_total' | 'cancelado';
 
 export type StatusCotacao = 'pendente' | 'respondida' | 'aceita' | 'rejeitada' | 'expirada';
@@ -158,11 +172,107 @@ export interface RecebimentoItem {
   };
 }
 
+// Interfaces para Workflow
+export interface SolicitacaoCompra {
+  id: string;
+  numero_solicitacao: string;
+  departamento_solicitante: string;
+  solicitante_id?: string;
+  supervisor_id?: string;
+  prioridade: PrioridadeTarefa;
+  valor_estimado?: number;
+  justificativa: string;
+  observacoes?: string;
+  data_necessidade?: string;
+  status: StatusTarefa;
+  aprovado_por?: string;
+  data_aprovacao?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SolicitacaoCompraItem {
+  id: string;
+  solicitacao_id: string;
+  produto_id?: string;
+  descricao_item: string;
+  quantidade: number;
+  valor_estimado_unitario?: number;
+  especificacoes?: string;
+  urgente: boolean;
+  created_at: string;
+}
+
+export interface TarefaCompra {
+  id: string;
+  numero_tarefa: string;
+  tipo_tarefa: TipoTarefaCompra;
+  titulo: string;
+  descricao?: string;
+  prioridade: PrioridadeTarefa;
+  status: StatusTarefa;
+  responsavel_id?: string;
+  solicitante_id?: string;
+  departamento_origem?: string;
+  prazo_limite?: string;
+  data_inicio?: string;
+  data_conclusao?: string;
+  tempo_estimado_horas?: number;
+  tempo_gasto_horas?: number;
+  solicitacao_compra_id?: string;
+  cotacao_id?: string;
+  pedido_compra_id?: string;
+  recebimento_id?: string;
+  observacoes?: string;
+  created_at: string;
+  updated_at: string;
+  // Relacionamentos
+  responsavel?: {
+    full_name: string;
+    email: string;
+  };
+  solicitante?: {
+    full_name: string;
+    email: string;
+  };
+  solicitacao_compra?: SolicitacaoCompra;
+  cotacao?: Cotacao;
+  pedido_compra?: PedidoCompra;
+  recebimento?: Recebimento;
+}
+
+export interface WorkflowComprasHistorico {
+  id: string;
+  tarefa_id: string;
+  etapa_origem?: TipoTarefaCompra;
+  etapa_destino?: TipoTarefaCompra;
+  usuario_id?: string;
+  data_transicao: string;
+  observacoes?: string;
+  dados_adicionais?: Record<string, any>;
+}
+
+export interface RegraAprovacaoCompra {
+  id: string;
+  departamento?: string;
+  valor_minimo: number;
+  valor_maximo?: number;
+  aprovador_id?: string;
+  ordem_aprovacao: number;
+  ativo: boolean;
+  created_at: string;
+}
+
 export interface DashboardComprasData {
+  tarefas_pendentes: number;
+  tarefas_em_andamento: number;
+  tarefas_atrasadas: number;
   pedidos_pendentes: number;
-  valor_total_mes: number;
-  fornecedores_ativos: number;
   cotacoes_abertas: number;
+  valor_mes_atual: number;
+  fornecedores_ativos: number;
+  valor_total_mes: number;
   pedidos_recentes: PedidoCompra[];
   cotacoes_vencendo: Cotacao[];
+  tarefas_recentes: TarefaCompra[];
 }
